@@ -1,0 +1,24 @@
+# Entorno virtual
+.venv/
+
+# Base de datos local
+*.sqlite3
+
+# Variables de entorno
+.env
+
+# Contenido media (se genera con scripts/create_sample_media.sh)
+media/**
+!media/.gitkeep
+!media/movies/
+!media/movies/.gitkeep
+!media/series/
+!media/series/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Django
+staticfiles/
