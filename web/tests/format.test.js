@@ -33,6 +33,11 @@ describe('formatClock', () => {
   it('usa formato h:mm:ss con horas', () => {
     expect(formatClock(3723)).toBe('1:02:03')
   })
+
+  it('redondea segundos con decimales', () => {
+    expect(formatClock(0.432)).toBe('0:00')
+    expect(formatClock(1402.154)).toBe('23:22')
+  })
 })
 
 describe('percentWatched', () => {
