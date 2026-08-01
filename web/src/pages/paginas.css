@@ -1,0 +1,12 @@
+/* Estilos compartidos de páginas (grids de catálogo). */
+.grid-catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--espacio-lg);
+}
+
+@media (max-width: 480px) {
+  .grid-catalogo {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}

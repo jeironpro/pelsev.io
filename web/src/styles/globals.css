@@ -1,0 +1,86 @@
+/* Estilos globales de pelsev.io web. */
+@import './variables.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--tamano-cuerpo);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-titulo);
+  font-weight: 400;
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.material-icons {
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+
+/* Barras de desplazamiento */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-superficie-elevada);
+  border-radius: var(--radio-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-borde);
+}
+
+/* Estado de carga */
+.cargando {
+  display: grid;
+  place-items: center;
+  min-height: 50vh;
+  color: var(--color-texto-secundario);
+}
+
+/* Contenedor de página */
+.pagina {
+  padding: var(--espacio-xl) var(--espacio-lg);
+}
+
+.pagina__titulo {
+  font-size: var(--tamano-titulo-seccion);
+  margin-bottom: var(--espacio-lg);
+}

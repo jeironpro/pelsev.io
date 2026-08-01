@@ -1,0 +1,65 @@
+/* Detalle de película. */
+.detalle {
+  position: relative;
+  min-height: calc(100vh - var(--alto-header));
+  display: flex;
+  flex-direction: column;
+}
+
+.detalle__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0.25;
+  filter: blur(2px);
+}
+
+.detalle__cuerpo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--espacio-xl);
+}
+
+.detalle__titulo {
+  font-size: var(--tamano-titulo-hero);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.detalle__descripcion {
+  max-width: 560px;
+  color: var(--color-texto-secundario);
+}
+
+.detalle__reproducir {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-md);
+}
+
+.detalle__reproducir .material-icons {
+  font-size: 5rem;
+  color: var(--color-acento);
+  transition: transform 0.2s ease;
+}
+
+.detalle__reproducir:hover .material-icons {
+  transform: scale(1.1);
+}
+
+.detalle__duracion {
+  font-size: var(--tamano-cuerpo);
+  color: var(--color-texto);
+}
+
+@media (max-width: 480px) {
+  .detalle__cuerpo {
+    padding: var(--espacio-lg) var(--espacio-md);
+  }
+}

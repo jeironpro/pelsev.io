@@ -8,6 +8,13 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Añadido
 
+- Frontend web en React + Vite con el proyecto `pelsevio-web` en `web/`.
+- Libro de estilo y diseño visual (`web/docs/libro-de-estilo.md`) con variables CSS y componentes reutilizables.
+- Páginas de inicio, listados de películas y series, y detalle de contenido (con temporadas y episodios).
+- Reproductor de vídeo con guardado automático de progreso y reanudación (seek).
+- Página "Continuar viendo" con opción de eliminar del historial.
+- Ajustes para limpiar el historial de reproducción.
+- Tests con Vitest y React Testing Library (17 tests).
 - Backend Django REST Framework con el paquete del proyecto `pelsevio`.
 - Modelos del catálogo: `Category`, `Saga`, `Movie`, `Series`, `Season` y `Episode`.
 - Modelo de reproducción `Progress` para guardar la posición de visualización.

@@ -1,0 +1,43 @@
+/* Tarjeta de episodio. */
+.episodio {
+  padding: var(--espacio-md);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background-color: var(--color-superficie);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.episodio:hover {
+  border-color: var(--color-texto-secundario);
+  transform: translateY(-2px);
+}
+
+.episodio__encabezado {
+  display: flex;
+  align-items: baseline;
+  gap: var(--espacio-md);
+}
+
+.episodio__numero {
+  font-weight: 700;
+  color: var(--color-acento);
+}
+
+.episodio__titulo {
+  flex: 1;
+  font-size: var(--tamano-cuerpo);
+}
+
+.episodio__duracion {
+  font-size: var(--tamano-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+.episodio__estado {
+  margin: var(--espacio-xs) 0 var(--espacio-md);
+  font-size: var(--tamano-pequeno);
+  color: var(--color-texto-secundario);
+}
