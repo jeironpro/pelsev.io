@@ -13,8 +13,8 @@ Las carpetas de temporada se detectan por su número (p. ej. "season-1",
 "temporada_1_...") y los episodios por su número (p. ej. "episode-1.mp4",
 "001.mp4", "nrtolat003.mp4").
 
-Con --generate-thumbnails también se generan miniaturas para series y
-temporadas a partir del primer vídeo de cada una.
+Con --generate-thumbnails también se generan miniaturas para series,
+temporadas y cada episodio desde su propio vídeo.
 """
 
 # Identifica el año como marcador de temporada en el nombre de carpeta.
@@ -28,6 +28,7 @@ from apps.core.utils.media_scanner import (
     duration_ffprobe,
     generate_thumbnail,
     image_in,
+    image_named,
     name_to_slug,
     slug_to_title,
     videos_in,
@@ -159,7 +160,7 @@ class Command(BaseCommand):
                 continue
             summary["series"] += 1
 
-            series_image = image_in(series_folder)
+            series_image = image_named(series_folder, "thumbnail")
             season_dirs = [
                 d for d in series_folder.iterdir() if d.is_dir() and videos_in(d)
             ]
@@ -189,17 +190,25 @@ class Command(BaseCommand):
                 )
                 summary["seasons"] += 1
 
-                season_image = image_in(season_folder)
+                season_image = image_named(season_folder, "thumbnail") or image_in(
+                    season_folder
+                )
                 season_videos = videos_in(season_folder)
                 if self.generate_thumbnails and season_image is None and season_videos:
                     season_image = generate_thumbnail(
                         season_videos[0], season_folder / "thumbnail.jpg"
                     )
-                image = season_image or series_image
 
                 for video_path in season_videos:
                     video_relative = relative_path(media_root, video_path)
                     active_paths.add(video_relative)
+                    ep_image = image_named(season_folder, video_path.stem)
+                    if ep_image is None and self.generate_thumbnails:
+                        ep_image = generate_thumbnail(
+                            video_path,
+                            season_folder / f"{video_path.stem}.jpg",
+                        )
+                    image = ep_image or season_image or series_image
                     Episode.objects.update_or_create(
                         season=season,
                         number=episode_number(video_path),

@@ -8,7 +8,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Añadido
 
-- Generación de miniaturas para series y temporadas con `scan_media --generate-thumbnails` (desde el primer vídeo de cada una).
+- Generación de miniaturas para series, temporadas y cada episodio con `scan_media --generate-thumbnails` (desde el vídeo de cada uno).
 - Limpieza de sagas huérfanas (sin películas) al reescanear.
 - Frontend web en React + Vite con el proyecto `pelsevio-web` en `web/`.
 - Libro de estilo y diseño visual (`web/docs/libro-de-estilo.md`) con variables CSS y componentes reutilizables.

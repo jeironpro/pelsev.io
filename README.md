@@ -105,7 +105,7 @@ python manage.py scan_media              # puebla el catálogo desde media/
 python manage.py scan_media --generate-thumbnails   # además crea miniaturas desde el vídeo
 ```
 
-`--generate-thumbnails` crea `thumbnail.jpg` para películas y también para series y temporadas (desde el primer vídeo de cada una).
+`--generate-thumbnails` crea `thumbnail.jpg` para películas, series y temporadas, y una miniatura propia (`<nombre>.jpg`) para cada episodio desde su propio vídeo.
 
 ### Servidor
 
