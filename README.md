@@ -1,9 +1,135 @@
 # pelsev.io
 
-## 📌 Descripción
-Este proyecto forma parte de mi portafolio personal.  
-El objetivo es demostrar buenas prácticas de programación, organización y documentación en GitHub.
+Plataforma de streaming estilo Netflix para películas y series. En su primera versión (v1) cuenta con un **backend API REST** y, próximamente, un **frontend web** (React + Vite).
 
-## 📜 Licencia
-Este proyecto está bajo la licencia **MIT**.  
-Consulta el archivo [LICENSE](LICENSE) para más detalles.
+El contenido se carga automáticamente desde una carpeta `media/` mediante un comando de escaneo que detecta películas, sagas, series, temporadas y episodios, leyendo su duración con `ffprobe`.
+
+## Características (v1)
+
+- **Catálogo automático**: escaneo idempotente de la carpeta `media/` (películas, sagas, series, temporadas y episodios).
+- **Reproducción con estado**: se guarda la posición (minuto) de cada película o episodio.
+- **Continuar viendo**: listado de los contenidos en curso con posición y tiempo restante, y opción de eliminarlos.
+- **Streaming por rangos**: los vídeos se sirven con soporte HTTP Range (seek), listos para el reproductor de vídeo.
+- **Sin autenticación**: v1 pensada para un único usuario (el progreso se guarda globalmente).
+- **Panel de administración** de Django para editar el catálogo manualmente.
+
+## Stack
+
+| Capa | Tecnología |
+| --- | --- |
+| Backend | Python, Django 6, Django REST Framework |
+| API | drf-spectacular (Swagger/OpenAPI), django-filter |
+| Media | ffmpeg / ffprobe (duración y miniaturas) |
+| Tests | pytest, pytest-django |
+| Estilo | flake8, black, isort |
+
+## Estructura del repositorio
+
+```
+pelsev.io/
+├── backend/            # API REST (Django + DRF)
+│   ├── apps/
+│   │   ├── catalog/    # Categorías, sagas, películas, series, temporadas, episodios
+│   │   ├── playback/   # Progreso de reproducción y "Continuar viendo"
+│   │   └── core/       # Comando scan_media y entrega de media
+│   ├── config/         # Routers de la API y Swagger
+│   ├── pelsevio/       # Configuración del proyecto Django
+│   ├── media/          # Contenido: películas y series
+│   ├── scripts/        # Utilidades (generación de contenido de ejemplo)
+│   └── tests/          # Tests (pytest)
+└── web/                # Frontend React + Vite (próximamente)
+```
+
+## Puesta en marcha (backend)
+
+Requisitos: Python 3.12+, `ffmpeg` y `ffprobe` en el PATH.
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements-dev.txt    # opcional: tests y lint
+cp .env.example .env
+```
+
+### Contenido media
+
+Crea la estructura de carpetas bajo `backend/media/` con esta convención:
+
+```
+media/
+├── movies/
+│   ├── el-padrino/                      # película individual
+│   │   ├── video.mp4
+│   │   └── thumbnail.jpg
+│   └── star-wars/                       # saga (contiene subcarpeta movies/)
+│       ├── thumbnail.jpg
+│       └── movies/
+│           ├── una-nueva-esperanza/video.mp4
+│           └── el-imperio-contraataca/video.mp4
+└── series/
+    └── breaking-bad/
+        ├── thumbnail.jpg
+        ├── season-1/episode-1.mp4
+        ├── season-1/episode-2.mp4
+        └── season-2/episode-1.mp4
+```
+
+Para generar contenido de ejemplo de forma rápida:
+
+```bash
+bash scripts/create_sample_media.sh
+```
+
+### Migraciones y escaneo
+
+```bash
+python manage.py migrate
+python manage.py scan_media              # puebla el catálogo desde media/
+python manage.py scan_media --generate-thumbnails   # opcional: crea miniaturas desde el vídeo
+```
+
+### Servidor
+
+```bash
+python manage.py runserver
+```
+
+- API: <http://localhost:8000/api/catalog/home/>
+- Swagger: <http://localhost:8000/api/docs/>
+- Admin: <http://localhost:8000/admin/>
+
+### Tests y lint
+
+```bash
+python -m pytest
+black . && isort . && flake8
+```
+
+## Endpoints principales
+
+| Método | Ruta | Descripción |
+| --- | --- | --- |
+| GET | `/api/catalog/home/` | Categorías con contenido y sagas (inicio) |
+| GET | `/api/catalog/movies/` | Listado de películas (filtro `?category=`) |
+| GET | `/api/catalog/movies/{id}/` | Detalle de película |
+| GET | `/api/catalog/series/` | Listado de series |
+| GET | `/api/catalog/series/{id}/` | Detalle con temporadas, episodios y progreso |
+| GET | `/api/playback/progress/continue-watching/` | Contenidos en curso |
+| POST | `/api/playback/progress/` | Guardar posición (`type`, `content_id`, `position_sec`, ...) |
+| DELETE | `/api/playback/progress/{id}/` | Quitar de "Continuar viendo" |
+| GET | `/api/media/{type}/{id}/video/` | Vídeo con soporte Range (`movie` o `episode`) |
+| GET | `/api/media/{type}/{id}/thumbnail/` | Miniatura (`movie`, `episode` o `series`) |
+
+## Roadmap
+
+- [x] Backend: catálogo, escaneo de media y streaming
+- [x] Backend: progreso de reproducción y "Continuar viendo"
+- [ ] Frontend web: React + Vite (layout, catálogo y reproductor)
+- [ ] Libro de estilo
+- [ ] Autenticación de usuarios
+
+## Licencia
+
+Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](LICENSE).
