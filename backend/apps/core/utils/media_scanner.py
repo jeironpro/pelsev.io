@@ -36,6 +36,15 @@ def image_in(directory):
     return None
 
 
+def image_named(directory, stem):
+    """Devuelve la imagen con el nombre dado (sin extensión) o None."""
+    for ext in IMAGE_EXTENSIONS:
+        candidate = Path(directory) / f"{stem}{ext}"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
 def duration_ffprobe(video_path):
     """Devuelve la duración en segundos de un vídeo usando ffprobe."""
     try:

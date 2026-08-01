@@ -2,7 +2,7 @@
 
 // Convierte segundos a un formato legible, p. ej. "1h 20m" o "3m 10s".
 export function formatDuration(totalSeconds) {
-  const seconds = Number(totalSeconds) || 0
+  const seconds = Math.round(Number(totalSeconds) || 0)
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const rest = seconds % 60
@@ -19,7 +19,7 @@ export function formatDuration(totalSeconds) {
 
 // Convierte segundos al formato de reloj "mm:ss" para el reproductor.
 export function formatClock(totalSeconds) {
-  const seconds = Math.max(0, Number(totalSeconds) || 0)
+  const seconds = Math.round(Math.max(0, Number(totalSeconds) || 0))
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const rest = String(seconds % 60).padStart(2, '0')
