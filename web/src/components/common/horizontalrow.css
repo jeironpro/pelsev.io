@@ -1,0 +1,22 @@
+/* Fila horizontal con scroll suave. */
+.fila {
+  margin-bottom: var(--espacio-xl);
+}
+
+.fila__titulo {
+  font-size: var(--tamano-titulo-seccion);
+  margin-bottom: var(--espacio-md);
+}
+
+.fila__contenedor {
+  display: flex;
+  gap: var(--espacio-md);
+  overflow-x: auto;
+  padding-bottom: var(--espacio-md);
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.fila__contenedor > * {
+  scroll-snap-align: start;
+}

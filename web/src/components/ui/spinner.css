@@ -1,0 +1,17 @@
+/* Spinner de carga. */
+.spinner {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  color: var(--color-texto-secundario);
+}
+
+.spinner__icono {
+  animation: spinner-girar 1s linear infinite;
+}
+
+@keyframes spinner-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

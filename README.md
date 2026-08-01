@@ -1,13 +1,14 @@
 # pelsev.io
 
-Plataforma de streaming estilo Netflix para películas y series. En su primera versión (v1) cuenta con un **backend API REST** y, próximamente, un **frontend web** (React + Vite).
+Plataforma de streaming estilo Netflix para películas y series. En su primera versión (v1) cuenta con un **backend API REST** y un **frontend web** (React + Vite).
 
 El contenido se carga automáticamente desde una carpeta `media/` mediante un comando de escaneo que detecta películas, sagas, series, temporadas y episodios, leyendo su duración con `ffprobe`.
 
 ## Características (v1)
 
 - **Catálogo automático**: escaneo idempotente de la carpeta `media/` (películas, sagas, series, temporadas y episodios).
-- **Reproducción con estado**: se guarda la posición (minuto) de cada película o episodio.
+- **Frontend web**: React + Vite con libro de estilo, páginas de catálogo, detalle de contenido y reproductor.
+- **Reproducción con estado**: se guarda la posición (minuto) de cada película o episodio y se reanuda al volver.
 - **Continuar viendo**: listado de los contenidos en curso con posición y tiempo restante, y opción de eliminarlos.
 - **Streaming por rangos**: los vídeos se sirven con soporte HTTP Range (seek), listos para el reproductor de vídeo.
 - **Sin autenticación**: v1 pensada para un único usuario (el progreso se guarda globalmente).
@@ -19,9 +20,11 @@ El contenido se carga automáticamente desde una carpeta `media/` mediante un co
 | --- | --- |
 | Backend | Python, Django 6, Django REST Framework |
 | API | drf-spectacular (Swagger/OpenAPI), django-filter |
+| Frontend | React 18, Vite, React Router |
+| Estilo web | CSS variables, Material Icons, Prettier, ESLint |
 | Media | ffmpeg / ffprobe (duración y miniaturas) |
-| Tests | pytest, pytest-django |
-| Estilo | flake8, black, isort |
+| Tests | pytest, pytest-django (backend) y Vitest + Testing Library (web) |
+| Estilo | flake8, black, isort (backend) |
 
 ## Estructura del repositorio
 
@@ -37,7 +40,17 @@ pelsev.io/
 │   ├── media/          # Contenido: películas y series
 │   ├── scripts/        # Utilidades (generación de contenido de ejemplo)
 │   └── tests/          # Tests (pytest)
-└── web/                # Frontend React + Vite (próximamente)
+└── web/                # Frontend React + Vite
+    ├── src/
+    │   ├── components/ # Componentes de interfaz (tarjetas, layout, UI)
+    │   ├── context/    # Estado global (sidebar)
+    │   ├── hooks/      # Hooks (useFetch)
+    │   ├── pages/      # Páginas (home, catálogo, detalle, reproductor, ajustes)
+    │   ├── services/   # Clientes de la API
+    │   ├── styles/     # Variables CSS y estilos globales
+    │   └── utils/      # Utilidades de formato
+    ├── docs/           # Libro de estilo
+    └── tests/          # Tests (Vitest + Testing Library)
 ```
 
 ## Puesta en marcha (backend)
@@ -107,6 +120,25 @@ python -m pytest
 black . && isort . && flake8
 ```
 
+## Puesta en marcha (frontend web)
+
+Requisitos: Node.js 20+ y npm. El backend debe estar en marcha en el puerto 8000 (el servidor de desarrollo hace proxy de `/api`).
+
+```bash
+cd web
+npm install
+npm run dev          # http://localhost:5173
+```
+
+### Tests, lint y formato (web)
+
+```bash
+npm run test:run     # Vitest (una ejecución)
+npm run lint         # ESLint
+npm run format       # Prettier (reescribe)
+npm run build        # build de producción
+```
+
 ## Endpoints principales
 
 | Método | Ruta | Descripción |
@@ -126,8 +158,8 @@ black . && isort . && flake8
 
 - [x] Backend: catálogo, escaneo de media y streaming
 - [x] Backend: progreso de reproducción y "Continuar viendo"
-- [ ] Frontend web: React + Vite (layout, catálogo y reproductor)
-- [ ] Libro de estilo
+- [x] Frontend web: React + Vite (layout, catálogo y reproductor)
+- [x] Libro de estilo
 - [ ] Autenticación de usuarios
 
 ## Licencia

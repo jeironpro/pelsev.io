@@ -1,0 +1,13 @@
+/* Detalle de serie: fondo, temporadas y episodios. */
+.serie-detalle__temporadas {
+  display: flex;
+  gap: var(--espacio-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--espacio-xl);
+}
+
+.serie-detalle__episodios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--espacio-md);
+}

@@ -1,0 +1,36 @@
+/* Botones. */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-sm) var(--espacio-lg);
+  border: none;
+  border-radius: var(--radio-md);
+  font-size: var(--tamano-cuerpo);
+  font-weight: 700;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.boton--primaria {
+  background-color: var(--color-acento);
+  color: #fff;
+}
+
+.boton--primaria:hover {
+  background-color: var(--color-acento-hover);
+}
+
+.boton--secundaria {
+  background-color: var(--color-superficie-elevada);
+  color: var(--color-texto);
+}
+
+.boton--secundaria:hover {
+  background-color: var(--color-borde);
+}
+
+.boton:active {
+  transform: scale(0.98);
+}
