@@ -36,6 +36,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Corregido
 
+- Alineado el frontend con las claves en inglés de la API (crash de la página de inicio).
+- Adoptados los future flags `v7_startTransition` y `v7_relativeSplatPath` de React Router.
 - Corrección del filtro de `update_or_create` del progreso (`**lookup`).
 
 ### Eliminado

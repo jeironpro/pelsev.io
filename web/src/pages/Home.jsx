@@ -78,23 +78,23 @@ export default function Home() {
       {catalogo?.sagas?.length > 0 && (
         <HorizontalRow titulo="Sagas">
           {catalogo.sagas.map((saga) => (
-            <ContentCard key={saga.id} item={saga.peliculas[0] || {}} tipo="pelicula" />
+            <ContentCard key={saga.id} item={saga.movies[0] || {}} tipo="pelicula" />
           ))}
         </HorizontalRow>
       )}
 
-      {catalogo?.categorias?.length === 0 && (
+      {catalogo?.categories?.length === 0 && (
         <EmptyState message="No hay contenido disponible." />
       )}
 
-      {catalogo?.categorias?.map((categoria) => {
+      {catalogo?.categories?.map((categoria) => {
         const items = [
-          ...categoria.peliculas.map((p) => ({ ...p, tipo: 'pelicula' })),
+          ...categoria.movies.map((p) => ({ ...p, tipo: 'pelicula' })),
           ...categoria.series.map((s) => ({ ...s, tipo: 'series' })),
         ]
         if (items.length === 0) return null
         return (
-          <HorizontalRow key={categoria.slug} titulo={categoria.nombre}>
+          <HorizontalRow key={categoria.slug} titulo={categoria.name}>
             {items.map((item) => (
               <ContentCard
                 key={`${item.tipo}-${item.id}`}
