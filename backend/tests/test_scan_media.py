@@ -49,3 +49,34 @@ def test_escaneo_elimina_obsoletos(media_root, populated):
     shutil.rmtree(media_root / "movies" / "el-padrino")
     call_command("scan_media")
     assert not Movie.objects.filter(pk=obsolete.pk).exists()
+
+
+@pytest.mark.django_db
+def test_escaneo_elimina_sagas_sin_peliculas(media_root, populated):
+    """Una saga sin películas en disco se elimina al reescanear."""
+    import shutil
+
+    shutil.rmtree(media_root / "movies" / "star-wars")
+    call_command("scan_media")
+    assert not Saga.objects.filter(slug="star-wars").exists()
+
+
+@pytest.mark.django_db
+def test_escaneo_sin_miniaturas_de_serie(populated):
+    """Sin --generate-thumbnails las series y episodios quedan sin imagen."""
+    series = Series.objects.get(slug="breaking-bad")
+    assert series.thumbnail == ""
+    assert all(not e.thumbnail for e in Episode.objects.all())
+
+
+@pytest.mark.django_db
+def test_escaneo_genera_miniaturas_de_series(populated_thumbnails):
+    """Con --generate-thumbnails la serie y las temporadas reciben miniatura."""
+    media_root, generated = populated_thumbnails
+    series = Series.objects.get(slug="breaking-bad")
+    assert series.thumbnail == "series/breaking-bad/thumbnail.jpg"
+    assert str(media_root / "series/breaking-bad/thumbnail.jpg") in generated
+
+    episodio = Episode.objects.get(season__series=series, season__number=1, number=1)
+    assert episodio.thumbnail == "series/breaking-bad/season-1/thumbnail.jpg"
+    assert str(media_root / "series/breaking-bad/season-1/thumbnail.jpg") in generated

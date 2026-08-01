@@ -8,6 +8,13 @@ Convención de carpetas:
         thumbnail.jpg + movies/<pelicula>/video.mp4
     media/series/<slug>/<temporada>/...     → serie con temporadas
         thumbnail.jpg + season-1/episode-1.mp4
+
+Las carpetas de temporada se detectan por su número (p. ej. "season-1",
+"temporada_1_...") y los episodios por su número (p. ej. "episode-1.mp4",
+"001.mp4", "nrtolat003.mp4").
+
+Con --generate-thumbnails también se generan miniaturas para series y
+temporadas a partir del primer vídeo de cada una.
 """
 
 # Identifica el año como marcador de temporada en el nombre de carpeta.
@@ -114,6 +121,7 @@ class Command(BaseCommand):
 
         # Elimina registros obsoletos (sin coincidencia en disco).
         Movie.objects.exclude(video__in=active_paths).delete()
+        Saga.objects.filter(movies=None).delete()
 
     def _create_movie(self, media_root, folder, saga=None, order=0):
         """Crea o actualiza una película y devuelve su ruta de vídeo activa."""
@@ -152,6 +160,18 @@ class Command(BaseCommand):
             summary["series"] += 1
 
             series_image = image_in(series_folder)
+            season_dirs = [
+                d for d in series_folder.iterdir() if d.is_dir() and videos_in(d)
+            ]
+            if not season_dirs and videos_in(series_folder):
+                season_dirs = [series_folder]
+
+            if season_dirs and self.generate_thumbnails and series_image is None:
+                first_video = videos_in(season_dirs[0])[0]
+                series_image = generate_thumbnail(
+                    first_video, series_folder / "thumbnail.jpg"
+                )
+
             series, _ = Series.objects.update_or_create(
                 slug=name_to_slug(series_folder.name),
                 defaults={
@@ -162,12 +182,6 @@ class Command(BaseCommand):
                 },
             )
 
-            season_dirs = [
-                d for d in series_folder.iterdir() if d.is_dir() and videos_in(d)
-            ]
-            if not season_dirs and videos_in(series_folder):
-                season_dirs = [series_folder]
-
             for season_folder in sorted(season_dirs):
                 season, _ = Season.objects.get_or_create(
                     series=series,
@@ -175,10 +189,17 @@ class Command(BaseCommand):
                 )
                 summary["seasons"] += 1
 
-                for video_path in videos_in(season_folder):
+                season_image = image_in(season_folder)
+                season_videos = videos_in(season_folder)
+                if self.generate_thumbnails and season_image is None and season_videos:
+                    season_image = generate_thumbnail(
+                        season_videos[0], season_folder / "thumbnail.jpg"
+                    )
+                image = season_image or series_image
+
+                for video_path in season_videos:
                     video_relative = relative_path(media_root, video_path)
                     active_paths.add(video_relative)
-                    image = image_in(season_folder) or series_image
                     Episode.objects.update_or_create(
                         season=season,
                         number=episode_number(video_path),

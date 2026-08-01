@@ -48,6 +48,24 @@ def populated(media_root):
 
 
 @pytest.fixture
+def populated_thumbnails(media_root, monkeypatch):
+    """Ejecuta el escaneo con miniaturas simuladas para series y temporadas."""
+    generated = []
+
+    def fake_generate_thumbnail(video_path, output_path):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(b"thumb-data")
+        generated.append(str(output_path))
+        return output_path
+
+    monkeypatch.setattr(
+        scan_media_module, "generate_thumbnail", fake_generate_thumbnail
+    )
+    call_command("scan_media", generate_thumbnails=True)
+    return media_root, generated
+
+
+@pytest.fixture
 def client():
     """Cliente de pruebas de la API."""
     return APIClient()

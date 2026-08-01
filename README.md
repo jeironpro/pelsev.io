@@ -82,12 +82,14 @@ media/
 │           ├── una-nueva-esperanza/video.mp4
 │           └── el-imperio-contraataca/video.mp4
 └── series/
-    └── breaking-bad/
-        ├── thumbnail.jpg
-        ├── season-1/episode-1.mp4
-        ├── season-1/episode-2.mp4
-        └── season-2/episode-1.mp4
+    └── naruto/
+        ├── thumbnail.jpg                # opcional (se genera con --generate-thumbnails)
+        └── temporada_1_el_pais_de_las_olas/   # la temporada se detecta por su número
+            ├── episodio-1.mp4           # episodio 1 (también valen 001.mp4, episode-1.mp4)
+            └── episodio-2.mp4
 ```
+
+Las carpetas de temporada se detectan por el número del nombre (p. ej. `season-1`, `temporada_1_...`) y los episodios por el número del archivo (p. ej. `episode-1.mp4`, `001.mp4`). Las carpetas de temporada vacías se ignoran.
 
 Para generar contenido de ejemplo de forma rápida:
 
@@ -100,8 +102,10 @@ bash scripts/create_sample_media.sh
 ```bash
 python manage.py migrate
 python manage.py scan_media              # puebla el catálogo desde media/
-python manage.py scan_media --generate-thumbnails   # opcional: crea miniaturas desde el vídeo
+python manage.py scan_media --generate-thumbnails   # además crea miniaturas desde el vídeo
 ```
+
+`--generate-thumbnails` crea `thumbnail.jpg` para películas y también para series y temporadas (desde el primer vídeo de cada una).
 
 ### Servidor
 

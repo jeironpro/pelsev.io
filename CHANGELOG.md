@@ -8,6 +8,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Añadido
 
+- Generación de miniaturas para series y temporadas con `scan_media --generate-thumbnails` (desde el primer vídeo de cada una).
+- Limpieza de sagas huérfanas (sin películas) al reescanear.
 - Frontend web en React + Vite con el proyecto `pelsevio-web` en `web/`.
 - Libro de estilo y diseño visual (`web/docs/libro-de-estilo.md`) con variables CSS y componentes reutilizables.
 - Páginas de inicio, listados de películas y series, y detalle de contenido (con temporadas y episodios).
@@ -36,6 +38,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Corregido
 
+- Generación de miniaturas para series y temporadas con `scan_media --generate-thumbnails`.
+- Limpieza de sagas huérfanas al reescanear (sin películas en disco).
 - Alineado el frontend con las claves en inglés de la API (crash de la página de inicio).
 - Adoptados los future flags `v7_startTransition` y `v7_relativeSplatPath` de React Router.
 - Corrección del filtro de `update_or_create` del progreso (`**lookup`).
