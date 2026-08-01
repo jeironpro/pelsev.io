@@ -137,7 +137,7 @@ export default function Reproductor() {
       <video
         ref={videoRef}
         className="reproductor__video"
-        src={`/api/media/${tipo}/${id}/video/`}
+        src={`/api/media/${tipoApi}/${id}/video/`}
         controls
         autoPlay
         onLoadedMetadata={alMetadatos}
