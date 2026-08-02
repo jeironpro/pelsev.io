@@ -2,6 +2,7 @@ import './paginas.css'
 
 import { useCallback, useEffect, useState } from 'react'
 
+import CategoryCard from '../components/common/CategoryCard'
 import ContinueWatchingCard from '../components/common/ContinueWatchingCard'
 import ContentCard from '../components/common/ContentCard'
 import EmptyState from '../components/common/EmptyState'
@@ -11,7 +12,7 @@ import Spinner from '../components/ui/Spinner'
 import { catalogService } from '../services/catalogService'
 import { progressService } from '../services/progressService'
 
-// Página de inicio: "Continuar viendo" y filas por categoría.
+// Página de inicio: categorías, "Continuar viendo" y secciones por categoría.
 export default function Home() {
   const [catalogo, setCatalogo] = useState(null)
   const [continuar, setContinuar] = useState([])
@@ -65,8 +66,18 @@ export default function Home() {
     )
   }
 
+  const categorias = catalogo?.categories ?? []
+
   return (
     <div className="pagina">
+      {categorias.length > 0 && (
+        <HorizontalRow titulo="Categorías">
+          {categorias.map((categoria) => (
+            <CategoryCard key={categoria.slug} category={categoria} />
+          ))}
+        </HorizontalRow>
+      )}
+
       {continuar.length > 0 && (
         <HorizontalRow titulo="Continuar viendo">
           {continuar.map((item) => (
@@ -83,25 +94,26 @@ export default function Home() {
         </HorizontalRow>
       )}
 
-      {catalogo?.categories?.length === 0 && (
-        <EmptyState message="No hay contenido disponible." />
-      )}
+      {categorias.length === 0 && <EmptyState message="No hay contenido disponible." />}
 
-      {catalogo?.categories?.map((categoria) => {
+      {categorias.map((categoria) => {
         const items = [
           ...categoria.movies.map((p) => ({ ...p, tipo: 'pelicula' })),
           ...categoria.series.map((s) => ({ ...s, tipo: 'series' })),
         ]
-        if (items.length === 0) return null
         return (
           <HorizontalRow key={categoria.slug} titulo={categoria.name}>
-            {items.map((item) => (
-              <ContentCard
-                key={`${item.tipo}-${item.id}`}
-                item={item}
-                tipo={item.tipo === 'pelicula' ? 'pelicula' : 'serie'}
-              />
-            ))}
+            {items.length === 0 ? (
+              <EmptyState message="Aún no hay títulos en esta categoría." />
+            ) : (
+              items.map((item) => (
+                <ContentCard
+                  key={`${item.tipo}-${item.id}`}
+                  item={item}
+                  tipo={item.tipo === 'pelicula' ? 'pelicula' : 'serie'}
+                />
+              ))
+            )}
           </HorizontalRow>
         )
       })}

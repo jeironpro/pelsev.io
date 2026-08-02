@@ -1,0 +1,50 @@
+/* Tarjeta de categoría del inicio. */
+.categoria-tarjeta {
+  flex: 0 0 180px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-xs);
+  border-radius: var(--radio-lg);
+  cursor: pointer;
+  background-color: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-tarjeta);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.categoria-tarjeta:hover,
+.categoria-tarjeta:focus-visible {
+  transform: translateY(-6px);
+  border-color: var(--color-acento);
+  box-shadow: var(--sombra-flotante);
+  outline: none;
+}
+
+.categoria-tarjeta__icono {
+  font-size: 2rem;
+  color: var(--color-acento);
+}
+
+.categoria-tarjeta__nombre {
+  font-size: var(--tamano-titulo-tarjeta);
+  font-weight: 700;
+  text-align: center;
+}
+
+.categoria-tarjeta__cantidad {
+  font-size: var(--tamano-pequeno);
+  color: var(--color-texto-secundario);
+}
+
+@media (max-width: 480px) {
+  .categoria-tarjeta {
+    flex-basis: 150px;
+    height: 108px;
+  }
+}

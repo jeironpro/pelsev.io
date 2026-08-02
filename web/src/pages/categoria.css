@@ -1,0 +1,9 @@
+/* Página de categoría. */
+.categoria__seccion {
+  margin-bottom: var(--espacio-xl);
+}
+
+.categoria__sub {
+  font-size: 1.05rem;
+  color: var(--color-texto-secundario);
+}

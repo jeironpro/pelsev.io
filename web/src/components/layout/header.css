@@ -1,18 +1,21 @@
-/* Cabecera de pelsev.io. */
+/* Cabecera flotante de pelsev.io. */
 .cabecera {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--alto-header);
+  top: var(--espacio-md);
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 40;
+  height: var(--alto-header);
+  width: calc(100% - 2 * var(--espacio-lg));
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 0 var(--espacio-lg);
-  background-color: rgba(11, 11, 12, 0.9);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--color-borde);
+  border-radius: var(--radio-lg) var(--radio-lg) var(--radio-lg) 0;
+  background-color: rgba(11, 11, 12, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-flotante);
 }
 
 .cabecera__izquierda {
@@ -42,28 +45,6 @@
 .cabecera__enlace:hover,
 .cabecera__enlace.activo {
   color: var(--color-texto);
-}
-
-.cabecera__derecha {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.cabecera__icono {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-texto);
-  transition: background-color 0.2s ease;
-}
-
-.cabecera__icono:hover {
-  background-color: var(--color-superficie-elevada);
 }
 
 @media (max-width: 480px) {

@@ -82,14 +82,15 @@ media/
 │           ├── una-nueva-esperanza/video.mp4
 │           └── el-imperio-contraataca/video.mp4
 └── series/
-    └── naruto/
-        ├── thumbnail.jpg                # opcional (se genera con --generate-thumbnails)
-        └── temporada_1_el_pais_de_las_olas/   # la temporada se detecta por su número
-            ├── episodio-1.mp4           # episodio 1 (también valen 001.mp4, episode-1.mp4)
-            └── episodio-2.mp4
+    └── anime/                           # carpeta de categoría (de aquí se toma la categoría)
+        └── naruto/
+            ├── thumbnail.jpg            # opcional (se genera con --generate-thumbnails)
+            └── temporada_1_el_pais_de_las_olas/   # la temporada se detecta por su número
+                ├── episodio-1.mp4       # episodio 1 (también valen 001.mp4, episode-1.mp4)
+                └── episodio-2.mp4
 ```
 
-Las carpetas de temporada se detectan por el número del nombre (p. ej. `season-1`, `temporada_1_...`) y los episodios por el número del archivo (p. ej. `episode-1.mp4`, `001.mp4`). Las carpetas de temporada vacías se ignoran.
+Las series se agrupan en una carpeta por categoría (`media/series/<categoria>/<serie>/...`); la categoría se crea u obtiene a partir del nombre de esa carpeta y se asigna a cada serie del interior. Las carpetas de temporada se detectan por el número del nombre (p. ej. `season-1`, `temporada_1_...`) y los episodios por el número del archivo (p. ej. `episode-1.mp4`, `001.mp4`). Las carpetas de temporada vacías se ignoran.
 
 Para generar contenido de ejemplo de forma rápida:
 

@@ -1,22 +1,83 @@
-/* Fila horizontal con scroll suave. */
+/* Fila horizontal del catálogo con botones laterales. */
 .fila {
   margin-bottom: var(--espacio-xl);
 }
 
-.fila__titulo {
-  font-size: var(--tamano-titulo-seccion);
+.fila__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-md);
   margin-bottom: var(--espacio-md);
 }
 
+.fila__titulo {
+  font-size: var(--tamano-titulo-seccion);
+  margin: 0;
+}
+
+.fila__controles {
+  display: flex;
+  gap: var(--espacio-sm);
+}
+
+.fila__boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background-color: var(--color-superficie-elevada);
+  color: var(--color-texto);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.fila__boton:hover:not(:disabled) {
+  background-color: var(--color-acento);
+  color: var(--color-fondo);
+}
+
+.fila__boton:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 2px;
+}
+
+.fila__boton:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* El contenedor mantiene scroll (ratón, teclado y táctil) pero sin barra
+   visible; la navegación principal son los botones. El padding compensado
+   con márgenes negativos deja espacio para el efecto de levitación sin
+   recortarlo. */
 .fila__contenedor {
   display: flex;
   gap: var(--espacio-md);
   overflow-x: auto;
-  padding-bottom: var(--espacio-md);
-  scroll-snap-type: x mandatory;
+  padding: var(--espacio-sm) 0 var(--espacio-md);
+  margin: calc(-1 * var(--espacio-sm)) 0 calc(-1 * var(--espacio-md));
+  scroll-snap-type: x proximity;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.fila__contenedor::-webkit-scrollbar {
+  display: none;
 }
 
 .fila__contenedor > * {
   scroll-snap-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fila__contenedor {
+    scroll-behavior: auto;
+  }
 }

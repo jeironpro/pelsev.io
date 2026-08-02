@@ -64,4 +64,16 @@ describe('DetalleSerie', () => {
     await waitFor(() => expect(screen.getByText('Otra vez')).toBeInTheDocument())
     expect(screen.queryByText('Piloto')).not.toBeInTheDocument()
   })
+
+  it('recupera la temporada indicada en la URL al volver de un episodio', async () => {
+    render(
+      <MemoryRouter initialEntries={['/serie/1?temporada=2']}>
+        <Routes>
+          <Route path="/serie/:id" element={<DetalleSerie />} />
+        </Routes>
+      </MemoryRouter>
+    )
+    await waitFor(() => expect(screen.getByText('Otra vez')).toBeInTheDocument())
+    expect(screen.queryByText('Piloto')).not.toBeInTheDocument()
+  })
 })

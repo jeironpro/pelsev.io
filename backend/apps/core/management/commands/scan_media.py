@@ -6,8 +6,12 @@ Convención de carpetas:
         video.mp4 + thumbnail.jpg
     media/movies/<slug-saga>/movies/...     → saga de películas
         thumbnail.jpg + movies/<pelicula>/video.mp4
-    media/series/<slug>/<temporada>/...     → serie con temporadas
+    media/series/<categoria>/<slug>/<temporada>/... → serie con categoría
         thumbnail.jpg + season-1/episode-1.mp4
+
+Las series se agrupan en una carpeta por categoría (p. ej. media/series/anime/
+<serie>/...). La categoría se crea u obtiene a partir del nombre de esa carpeta
+y se asigna a cada serie del interior.
 
 Las carpetas de temporada se detectan por su número (p. ej. "season-1",
 "temporada_1_...") y los episodios por su número (p. ej. "episode-1.mp4",
@@ -23,7 +27,7 @@ import re
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from apps.catalog.models import Episode, Movie, Saga, Season, Series
+from apps.catalog.models import Category, Episode, Movie, Saga, Season, Series
 from apps.core.utils.media_scanner import (
     duration_ffprobe,
     generate_thumbnail,
@@ -155,73 +159,88 @@ class Command(BaseCommand):
         if not series_dir.is_dir():
             return
 
-        for series_folder in sorted(series_dir.iterdir()):
-            if not series_folder.is_dir():
+        for category_folder in sorted(series_dir.iterdir()):
+            if not category_folder.is_dir():
                 continue
-            summary["series"] += 1
-
-            series_image = image_named(series_folder, "thumbnail")
-            season_dirs = [
-                d for d in series_folder.iterdir() if d.is_dir() and videos_in(d)
-            ]
-            if not season_dirs and videos_in(series_folder):
-                season_dirs = [series_folder]
-
-            if season_dirs and self.generate_thumbnails and series_image is None:
-                first_video = videos_in(season_dirs[0])[0]
-                series_image = generate_thumbnail(
-                    first_video, series_folder / "thumbnail.jpg"
-                )
-
-            series, _ = Series.objects.update_or_create(
-                slug=name_to_slug(series_folder.name),
-                defaults={
-                    "title": slug_to_title(series_folder.name),
-                    "thumbnail": (
-                        relative_path(media_root, series_image) if series_image else ""
-                    ),
-                },
+            category, _ = Category.objects.get_or_create(
+                slug=name_to_slug(category_folder.name),
+                defaults={"name": slug_to_title(category_folder.name)},
             )
 
-            for season_folder in sorted(season_dirs):
-                season, _ = Season.objects.get_or_create(
-                    series=series,
-                    number=season_number(season_folder.name),
-                )
-                summary["seasons"] += 1
+            for series_folder in sorted(category_folder.iterdir()):
+                if not series_folder.is_dir():
+                    continue
+                summary["series"] += 1
 
-                season_image = image_named(season_folder, "thumbnail") or image_in(
-                    season_folder
-                )
-                season_videos = videos_in(season_folder)
-                if self.generate_thumbnails and season_image is None and season_videos:
-                    season_image = generate_thumbnail(
-                        season_videos[0], season_folder / "thumbnail.jpg"
+                series_image = image_named(series_folder, "thumbnail")
+                season_dirs = [
+                    d for d in series_folder.iterdir() if d.is_dir() and videos_in(d)
+                ]
+                if not season_dirs and videos_in(series_folder):
+                    season_dirs = [series_folder]
+
+                if season_dirs and self.generate_thumbnails and series_image is None:
+                    first_video = videos_in(season_dirs[0])[0]
+                    series_image = generate_thumbnail(
+                        first_video, series_folder / "thumbnail.jpg"
                     )
 
-                for video_path in season_videos:
-                    video_relative = relative_path(media_root, video_path)
-                    active_paths.add(video_relative)
-                    ep_image = image_named(season_folder, video_path.stem)
-                    if ep_image is None and self.generate_thumbnails:
-                        ep_image = generate_thumbnail(
-                            video_path,
-                            season_folder / f"{video_path.stem}.jpg",
+                series, _ = Series.objects.update_or_create(
+                    slug=name_to_slug(series_folder.name),
+                    defaults={
+                        "title": slug_to_title(series_folder.name),
+                        "thumbnail": (
+                            relative_path(media_root, series_image)
+                            if series_image
+                            else ""
+                        ),
+                    },
+                )
+                series.categories.add(category)
+
+                for season_folder in sorted(season_dirs):
+                    season, _ = Season.objects.get_or_create(
+                        series=series,
+                        number=season_number(season_folder.name),
+                    )
+                    summary["seasons"] += 1
+
+                    season_image = image_named(season_folder, "thumbnail") or image_in(
+                        season_folder
+                    )
+                    season_videos = videos_in(season_folder)
+                    if (
+                        self.generate_thumbnails
+                        and season_image is None
+                        and season_videos
+                    ):
+                        season_image = generate_thumbnail(
+                            season_videos[0], season_folder / "thumbnail.jpg"
                         )
-                    image = ep_image or season_image or series_image
-                    Episode.objects.update_or_create(
-                        season=season,
-                        number=episode_number(video_path),
-                        defaults={
-                            "title": slug_to_title(video_path.stem),
-                            "video": video_relative,
-                            "thumbnail": (
-                                relative_path(media_root, image) if image else ""
-                            ),
-                            "duration_sec": duration_ffprobe(video_path),
-                        },
-                    )
-                    summary["episodes"] += 1
+
+                    for video_path in season_videos:
+                        video_relative = relative_path(media_root, video_path)
+                        active_paths.add(video_relative)
+                        ep_image = image_named(season_folder, video_path.stem)
+                        if ep_image is None and self.generate_thumbnails:
+                            ep_image = generate_thumbnail(
+                                video_path,
+                                season_folder / f"{video_path.stem}.jpg",
+                            )
+                        image = ep_image or season_image or series_image
+                        Episode.objects.update_or_create(
+                            season=season,
+                            number=episode_number(video_path),
+                            defaults={
+                                "title": slug_to_title(video_path.stem),
+                                "video": video_relative,
+                                "thumbnail": (
+                                    relative_path(media_root, image) if image else ""
+                                ),
+                                "duration_sec": duration_ffprobe(video_path),
+                            },
+                        )
+                        summary["episodes"] += 1
 
         Episode.objects.exclude(video__in=active_paths).delete()
         Season.objects.filter(episodes=None).delete()

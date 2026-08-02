@@ -1,4 +1,11 @@
 .contenido {
-  padding-top: var(--alto-header);
+  padding-top: calc(var(--alto-header) + 2 * var(--espacio-md));
+  padding-left: calc(var(--ancho-sidebar-colapsado) + 2 * var(--espacio-lg));
   min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .contenido {
+    padding-left: calc(60px + 2 * var(--espacio-sm));
+  }
 }

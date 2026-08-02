@@ -7,12 +7,13 @@ from rest_framework.test import APIClient
 from apps.core.management.commands import scan_media as scan_media_module
 
 # Estructura de ejemplo de la carpeta media para los tests.
+# Las series se agrupan en una carpeta por categoría.
 MEDIA_TREE = {
     "movies/el-padrino": ["video.mp4", "thumbnail.jpg"],
     "movies/star-wars/movies/una-nueva-esperanza": ["video.mp4", "thumbnail.jpg"],
     "movies/star-wars/movies/el-imperio-contraataca": ["video.mp4", "thumbnail.jpg"],
-    "series/breaking-bad/season-1": ["episode-1.mp4", "episode-2.mp4"],
-    "series/breaking-bad/season-2": ["episode-1.mp4"],
+    "series/drama/breaking-bad/season-1": ["episode-1.mp4", "episode-2.mp4"],
+    "series/drama/breaking-bad/season-2": ["episode-1.mp4"],
 }
 
 

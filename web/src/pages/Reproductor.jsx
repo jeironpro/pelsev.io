@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import Button from '../components/ui/Button'
 import ErrorState from '../components/common/ErrorState'
+import VideoPlayer from '../components/player/VideoPlayer'
 import { progressService } from '../services/progressService'
-import { formatClock } from '../utils/format'
 
 import './reproductor.css'
 
@@ -23,13 +22,13 @@ export default function Reproductor() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const videoRef = useRef(null)
   const ultimoGuardado = useRef(0)
-  const posicionReanudar = useRef(0)
-  const tipoApi = TIPOS_API[tipo]
+  const ultimaPosicionRef = useRef(0)
+  const ultimaDuracionRef = useRef(0)
 
   const [error, setError] = useState(null)
-  const [progreso, setProgreso] = useState({ posicion: 0, duracion: 0 })
+  const [posicionReanudar, setPosicionReanudar] = useState(0)
+  const tipoApi = TIPOS_API[tipo]
   const titulo = location.state?.titulo
 
   // Recupera la última posición guardada para reanudar.
@@ -42,7 +41,7 @@ export default function Reproductor() {
           (x) => x.type === tipoApi && x.content_id === Number(id)
         )
         if (activo && item) {
-          posicionReanudar.current = item.position_sec
+          setPosicionReanudar(item.position_sec)
         }
       } catch {
         // Si falla la recuperación, se empieza desde el principio.
@@ -58,60 +57,54 @@ export default function Reproductor() {
 
   // Guarda el progreso actual en la API.
   const guardar = useCallback(
-    (completado = false) => {
-      const video = videoRef.current
-      if (!video || !video.duration) return
-      const finalizado = completado || video.currentTime >= video.duration - 5
+    (posicion, duracion, completado = false) => {
+      if (!duracion) return
+      const finalizado = completado || posicion >= duracion - 5
       progressService.save({
         type: tipoApi,
         contentId: Number(id),
-        positionSec: video.currentTime,
-        durationSec: video.duration,
+        positionSec: Math.round(posicion),
+        durationSec: Math.round(duracion),
         completed: finalizado,
       })
     },
     [tipoApi, id]
   )
 
-  // Guarda al salir de la página.
-  useEffect(() => {
-    const alSalir = () => guardar()
-    const alOcultar = () => guardar()
-    window.addEventListener('beforeunload', alSalir)
-    document.addEventListener('visibilitychange', alOcultar)
-    return () => {
-      guardar()
-      window.removeEventListener('beforeunload', alSalir)
-      document.removeEventListener('visibilitychange', alOcultar)
+  // Guarda durante la reproducción, como mucho cada 5 segundos.
+  const alTiempo = useCallback(
+    (posicion, duracion) => {
+      ultimaPosicionRef.current = posicion
+      ultimaDuracionRef.current = duracion
+      if (posicion - ultimoGuardado.current >= INTERVALO_GUARDADO) {
+        ultimoGuardado.current = posicion
+        guardar(posicion, duracion)
+      }
+    },
+    [guardar]
+  )
+
+  // Guarda al salir de la página con la última posición conocida.
+  const alSalir = useCallback(() => {
+    if (ultimaDuracionRef.current) {
+      guardar(ultimaPosicionRef.current, ultimaDuracionRef.current)
     }
   }, [guardar])
 
-  // Acciones del reproductor.
-  const alMetadatos = () => {
-    const video = videoRef.current
-    if (!video) return
-    if (posicionReanudar.current > 0 && posicionReanudar.current < video.duration - 5) {
-      video.currentTime = posicionReanudar.current
+  useEffect(() => {
+    const alOcultar = () => alSalir()
+    window.addEventListener('beforeunload', alSalir)
+    document.addEventListener('visibilitychange', alOcultar)
+    return () => {
+      alSalir()
+      window.removeEventListener('beforeunload', alSalir)
+      document.removeEventListener('visibilitychange', alOcultar)
     }
-    setProgreso((actual) => ({ ...actual, duracion: video.duration }))
-  }
-
-  const alTiempo = () => {
-    const video = videoRef.current
-    if (!video) return
-    setProgreso({ posicion: video.currentTime, duracion: video.duration })
-    const ahora = video.currentTime
-    if (ahora - ultimoGuardado.current >= INTERVALO_GUARDADO) {
-      ultimoGuardado.current = ahora
-      guardar()
-    }
-  }
-
-  const alTerminar = () => guardar(true)
+  }, [alSalir])
 
   if (!tipoApi) {
     return (
-      <div className="pagina">
+      <div className="reproductor">
         <ErrorState message="Tipo de contenido no válido." />
       </div>
     )
@@ -119,32 +112,18 @@ export default function Reproductor() {
 
   return (
     <div className="reproductor">
-      <div className="reproductor__barra">
-        <Button variant="secundaria" onClick={() => navigate(-1)}>
-          <span className="material-icons" aria-hidden="true">
-            arrow_back
-          </span>
-          Volver
-        </Button>
-        {titulo && <h2 className="reproductor__titulo">{titulo}</h2>}
-        <span className="reproductor__tiempo">
-          {formatClock(progreso.posicion)} / {formatClock(progreso.duracion)}
-        </span>
-      </div>
-
       {error && <ErrorState message={error.message} />}
 
-      <video
-        ref={videoRef}
-        className="reproductor__video"
+      <VideoPlayer
         src={`/api/media/${tipoApi}/${id}/video/`}
-        controls
-        autoPlay
-        onLoadedMetadata={alMetadatos}
+        titulo={titulo}
+        initialPosition={posicionReanudar}
+        onBack={() => navigate(-1)}
         onTimeUpdate={alTiempo}
-        onEnded={alTerminar}
+        onEnded={() =>
+          guardar(ultimaPosicionRef.current, ultimaDuracionRef.current, true)
+        }
         onError={() => setError(new Error('No se pudo cargar el vídeo.'))}
-        onPlaying={() => setError(null)}
       />
     </div>
   )
