@@ -2,7 +2,7 @@ import './detalle.css'
 import './serie.css'
 
 import { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 import EpisodeCard from '../components/common/EpisodeCard'
 import ErrorState from '../components/common/ErrorState'
@@ -13,6 +13,9 @@ import { catalogService } from '../services/catalogService'
 // Detalle de serie: fondo con opacidad, temporadas y episodios con estado.
 export default function DetalleSerie() {
   const { id } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const temporadaParam = searchParams.get('temporada')
+
   const [serie, setSerie] = useState(null)
   const [temporadaActiva, setTemporadaActiva] = useState(null)
   const [error, setError] = useState(null)
@@ -22,15 +25,22 @@ export default function DetalleSerie() {
     try {
       const data = await catalogService.seriesDetail(id)
       setSerie(data)
-      setTemporadaActiva(data.seasons?.[0]?.id ?? null)
+      const resaltada = data.seasons.find((t) => String(t.number) === temporadaParam)
+      setTemporadaActiva(resaltada?.id ?? data.seasons?.[0]?.id ?? null)
     } catch (err) {
       setError(err)
     }
-  }, [id])
+  }, [id, temporadaParam])
 
   useEffect(() => {
     cargar()
   }, [cargar])
+
+  // Selecciona una temporada y la refleja en la URL para recuperarla al volver.
+  const seleccionarTemporada = (temporada) => {
+    setTemporadaActiva(temporada.id)
+    setSearchParams({ temporada: String(temporada.number) }, { replace: true })
+  }
 
   if (error) {
     return (
@@ -66,7 +76,7 @@ export default function DetalleSerie() {
               key={t.id}
               season={t}
               activa={t.id === temporada?.id}
-              onSelect={() => setTemporadaActiva(t.id)}
+              onSelect={() => seleccionarTemporada(t)}
             />
           ))}
         </div>

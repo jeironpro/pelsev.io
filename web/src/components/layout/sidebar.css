@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: var(--espacio-lg);
   padding: var(--espacio-md) var(--espacio-sm);
-  border-radius: var(--radio-lg);
+  border-radius: var(--radio-lg) var(--radio-lg) var(--radio-lg) 0;
   background-color: rgba(22, 22, 24, 0.9);
   backdrop-filter: blur(12px);
   border: 1px solid var(--color-borde);
@@ -52,14 +52,20 @@
 .sidebar__enlace {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--espacio-md);
-  padding: var(--espacio-sm) var(--espacio-md);
+  padding: var(--espacio-sm);
   border-radius: var(--radio-md);
   color: var(--color-texto-secundario);
   white-space: nowrap;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+.sidebar:hover .sidebar__enlace {
+  justify-content: flex-start;
+  padding: var(--espacio-sm) var(--espacio-md);
 }
 
 .sidebar__enlace:hover,
