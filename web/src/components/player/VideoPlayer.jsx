@@ -13,6 +13,7 @@ export default function VideoPlayer({
   src,
   titulo,
   initialPosition = 0,
+  onBack,
   onLoadedMetadata,
   onTimeUpdate,
   onEnded,
@@ -241,6 +242,18 @@ export default function VideoPlayer({
       {mostrarControles && (
         <>
           <div className="reproductor-video__barra-superior">
+            {onBack && (
+              <button
+                type="button"
+                className="reproductor-video__boton"
+                onClick={onBack}
+                aria-label="Volver"
+              >
+                <span className="material-icons" aria-hidden="true">
+                  arrow_back
+                </span>
+              </button>
+            )}
             {titulo && <h2 className="reproductor-video__titulo">{titulo}</h2>}
             <button
               type="button"

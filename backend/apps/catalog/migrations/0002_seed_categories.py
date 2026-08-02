@@ -13,7 +13,6 @@ CATEGORIAS = [
     ("misterio", "Misterio"),
     ("suspenso", "Suspenso"),
     ("terror", "Terror"),
-    ("animacion", "Animación"),
 ]
 
 

@@ -3,7 +3,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import ErrorState from '../components/common/ErrorState'
 import VideoPlayer from '../components/player/VideoPlayer'
-import Button from '../components/ui/Button'
 import { progressService } from '../services/progressService'
 
 import './reproductor.css'
@@ -105,7 +104,7 @@ export default function Reproductor() {
 
   if (!tipoApi) {
     return (
-      <div className="pagina">
+      <div className="reproductor">
         <ErrorState message="Tipo de contenido no válido." />
       </div>
     )
@@ -113,22 +112,13 @@ export default function Reproductor() {
 
   return (
     <div className="reproductor">
-      <div className="reproductor__barra">
-        <Button variant="secundaria" onClick={() => navigate(-1)}>
-          <span className="material-icons" aria-hidden="true">
-            arrow_back
-          </span>
-          Volver
-        </Button>
-        {titulo && <h2 className="reproductor__titulo">{titulo}</h2>}
-      </div>
-
       {error && <ErrorState message={error.message} />}
 
       <VideoPlayer
         src={`/api/media/${tipoApi}/${id}/video/`}
         titulo={titulo}
         initialPosition={posicionReanudar}
+        onBack={() => navigate(-1)}
         onTimeUpdate={alTiempo}
         onEnded={() =>
           guardar(ultimaPosicionRef.current, ultimaDuracionRef.current, true)

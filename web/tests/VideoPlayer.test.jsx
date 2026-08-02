@@ -50,4 +50,11 @@ describe('VideoPlayer', () => {
     fireEvent.keyDown(jugador, { code: 'Space' })
     expect(play).toHaveBeenCalled()
   })
+
+  it('llama a onBack al pulsar el botón de volver', () => {
+    const onBack = vi.fn()
+    render(<VideoPlayer src="/video.mp4" onBack={onBack} />)
+    fireEvent.click(screen.getByLabelText('Volver'))
+    expect(onBack).toHaveBeenCalled()
+  })
 })
