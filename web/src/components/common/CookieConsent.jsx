@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import Button from '../ui/Button'
 
@@ -26,9 +27,9 @@ export default function CookieConsent() {
         <p className="cookie-banner__text">
           Usamos cookies propias y de terceros para mejorar tu experiencia.
         </p>
-        <a href="#" className="cookie-banner__more" onClick={(e) => e.preventDefault()}>
+        <Link to="/privacy" className="cookie-banner__more">
           Más información
-        </a>
+        </Link>
       </div>
       <div className="cookie-banner__action">
         <Button variant="primary" onClick={accept}>

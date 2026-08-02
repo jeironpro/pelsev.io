@@ -12,6 +12,7 @@ const DetallePelicula = lazy(() => import('../pages/DetallePelicula'))
 const DetalleSerie = lazy(() => import('../pages/DetalleSerie'))
 const Reproductor = lazy(() => import('../pages/Reproductor'))
 const Ajustes = lazy(() => import('../pages/Ajustes'))
+const PrivacyPolicy = lazy(() => import('../pages/PrivacyPolicy'))
 const NotFound = lazy(() => import('../pages/NotFound'))
 
 // Rutas de la aplicación.
@@ -27,6 +28,7 @@ export default function AppRoutes() {
         <Route path="/serie/:id" element={<DetalleSerie />} />
         <Route path="/reproductor/:tipo/:id" element={<Reproductor />} />
         <Route path="/ajustes" element={<Ajustes />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

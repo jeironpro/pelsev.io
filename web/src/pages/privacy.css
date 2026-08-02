@@ -1,0 +1,29 @@
+/* Página de privacidad. */
+.privacy__section {
+  margin-bottom: var(--space-xl);
+}
+
+.privacy__section h2 {
+  font-size: var(--size-body);
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.privacy__section p,
+.privacy__section li {
+  font-size: var(--size-body);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin: 0 0 var(--space-sm);
+}
+
+.privacy__section code {
+  background-color: var(--color-surface);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--size-small);
+}
+
+.privacy__section ul {
+  padding-left: var(--space-lg);
+}

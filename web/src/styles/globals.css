@@ -84,8 +84,7 @@ button {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
-  padding: var(--space-md) calc(var(--space-lg) + var(--space-md));
-  margin-left: var(--sidebar-width-collapsed);
+  padding: var(--space-md) var(--space-lg);
   background-color: var(--color-surface-elevated);
   border-top: 1px solid var(--color-border);
   z-index: 900;
@@ -125,7 +124,6 @@ button {
   .cookie-banner {
     flex-direction: column;
     align-items: flex-start;
-    margin-left: 0;
     padding: var(--space-md);
     gap: var(--space-md);
   }
