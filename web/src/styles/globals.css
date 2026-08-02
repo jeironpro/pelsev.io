@@ -75,6 +75,51 @@ button {
   color: var(--color-text-secondary);
 }
 
+/* Banner de consentimiento de cookies */
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-sm);
+  z-index: 1000;
+  box-shadow: var(--shadow-float);
+}
+
+.cookie-consent__content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.cookie-consent__message {
+  flex: 1;
+  font-size: var(--size-body);
+  line-height: 1.5;
+}
+
+.cookie-consent__link {
+  font-size: var(--size-small);
+  margin-top: var(--space-xs);
+}
+
+.cookie-consent__link a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.cookie-consent__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
 /* Contenedor de página */
 .page {
   padding: var(--space-xl) var(--space-lg);
