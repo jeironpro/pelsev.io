@@ -78,10 +78,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "pelsevio.wsgi.application"
 
 # Base de datos
+DB_PATH = Path(env("DB_PATH", default="db.sqlite3"))
+if not DB_PATH.is_absolute():
+    DB_PATH = BASE_DIR / DB_PATH
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_PATH,
     }
 }
 

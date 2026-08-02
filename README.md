@@ -25,6 +25,7 @@ El contenido se carga automáticamente desde una carpeta `media/` mediante un co
 | Dependencias frontend | Yarn (Corepack, versión fijada en `package.json`) |
 | Media | ffmpeg / ffprobe (duración y miniaturas) |
 | Hooks git | pre-commit (black, isort, flake8, eslint, prettier) |
+| Docker | Docker Compose (backend + frontend en producción) |
 | Tests | pytest, pytest-django (backend) y Vitest + Testing Library (web) |
 | Estilo | flake8, black, isort (backend) |
 | Dependencias backend | pip-tools: `pyproject.toml` → `requirements*.txt` |
@@ -147,6 +148,25 @@ pre-commit run --all-files  # ejecuta todos los hooks manualmente
 ```
 
 Incluye hooks para el backend (black, isort, flake8), el frontend (eslint, prettier) y validaciones básicas (YAML, espacios al final de línea, conflictos de merge, archivos grandes). La configuración está en `.pre-commit-config.yaml`; black/isort/flake8 leen su configuración de `backend/pyproject.toml`.
+
+## Docker
+
+### Desarrollo con Docker Compose
+
+Construye y arranca el backend y el frontend (disponible en <http://localhost:8080>):
+
+```bash
+docker compose up --build
+```
+
+El backend queda accesible en el puerto 8000 (solo desde el frontend) y la base de datos SQLite y los archivos media se conservan en un volumen Docker (`backend_data`).
+
+### Imágenes por separado
+
+```bash
+docker build -t pelsevio-backend backend
+docker build -t pelsevio-web web
+```
 
 ## Puesta en marcha (frontend web)
 
