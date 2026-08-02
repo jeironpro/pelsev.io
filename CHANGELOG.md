@@ -41,6 +41,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - Yarn como gestor de paquetes del frontend con la versión fijada en `package.json` (Corepack) y lockfile `yarn.lock`.
 - Hooks de pre-commit con lint y formato para backend (black, isort, flake8) y frontend (eslint, prettier) más validaciones básicas.
 - Contenerización Docker: Dockerfile multistage para backend (Python + ffmpeg + gunicorn) y frontend (Yarn build → Nginx), docker-compose.yml con volúmenes persistentes para DB y media.
+- CI/CD con GitHub Actions: flujo `ci` (tests y lint en backend/frontend, ffmpeg en el entorno) y flujo `docker-build` (validación de imágenes).
 
 ### Cambiado
 
