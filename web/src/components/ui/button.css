@@ -1,36 +1,36 @@
 /* Botones. */
-.boton {
+.button {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-sm);
-  padding: var(--espacio-sm) var(--espacio-lg);
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
   border: none;
-  border-radius: var(--radio-md);
-  font-size: var(--tamano-cuerpo);
+  border-radius: var(--radius-md);
+  font-size: var(--size-body);
   font-weight: 700;
   transition:
     background-color 0.2s ease,
     transform 0.2s ease;
 }
 
-.boton--primaria {
-  background-color: var(--color-acento);
+.button--primary {
+  background-color: var(--color-accent);
   color: #fff;
 }
 
-.boton--primaria:hover {
-  background-color: var(--color-acento-hover);
+.button--primary:hover {
+  background-color: var(--color-accent-hover);
 }
 
-.boton--secundaria {
-  background-color: var(--color-superficie-elevada);
-  color: var(--color-texto);
+.button--secondary {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
 }
 
-.boton--secundaria:hover {
-  background-color: var(--color-borde);
+.button--secondary:hover {
+  background-color: var(--color-border);
 }
 
-.boton:active {
+.button:active {
   transform: scale(0.98);
 }

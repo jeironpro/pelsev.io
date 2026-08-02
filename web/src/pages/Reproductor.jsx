@@ -8,13 +8,13 @@ import { progressService } from '../services/progressService'
 import './reproductor.css'
 
 // Conversión de tipo de ruta a tipo de la API.
-const TIPOS_API = {
+const API_TYPES = {
   pelicula: 'movie',
   episodio: 'episode',
 }
 
 // Guarda el progreso como mucho cada 5 segundos.
-const INTERVALO_GUARDADO = 5
+const SAVE_INTERVAL = 5
 
 // Página de reproducción: guarda y reanuda el estado de visualización.
 export default function Reproductor() {
@@ -22,106 +22,106 @@ export default function Reproductor() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const ultimoGuardado = useRef(0)
-  const ultimaPosicionRef = useRef(0)
-  const ultimaDuracionRef = useRef(0)
+  const lastSaved = useRef(0)
+  const lastPositionRef = useRef(0)
+  const lastDurationRef = useRef(0)
 
   const [error, setError] = useState(null)
-  const [posicionReanudar, setPosicionReanudar] = useState(0)
-  const tipoApi = TIPOS_API[tipo]
-  const titulo = location.state?.titulo
+  const [resumePosition, setResumePosition] = useState(0)
+  const apiType = API_TYPES[tipo]
+  const title = location.state?.title
 
   // Recupera la última posición guardada para reanudar.
   useEffect(() => {
-    let activo = true
-    async function recuperar() {
+    let active = true
+    async function restore() {
       try {
         const lista = await progressService.continueWatching()
         const item = lista.find(
-          (x) => x.type === tipoApi && x.content_id === Number(id)
+          (x) => x.type === apiType && x.content_id === Number(id)
         )
-        if (activo && item) {
-          setPosicionReanudar(item.position_sec)
+        if (active && item) {
+          setResumePosition(item.position_sec)
         }
       } catch {
         // Si falla la recuperación, se empieza desde el principio.
       }
     }
-    if (tipoApi) {
-      recuperar()
+    if (apiType) {
+      restore()
     }
     return () => {
-      activo = false
+      active = false
     }
-  }, [tipoApi, id])
+  }, [apiType, id])
 
   // Guarda el progreso actual en la API.
-  const guardar = useCallback(
-    (posicion, duracion, completado = false) => {
-      if (!duracion) return
-      const finalizado = completado || posicion >= duracion - 5
+  const save = useCallback(
+    (position, duration, completed = false) => {
+      if (!duration) return
+      const finished = completed || position >= duration - 5
       progressService.save({
-        type: tipoApi,
+        type: apiType,
         contentId: Number(id),
-        positionSec: Math.round(posicion),
-        durationSec: Math.round(duracion),
-        completed: finalizado,
+        positionSec: Math.round(position),
+        durationSec: Math.round(duration),
+        completed: finished,
       })
     },
-    [tipoApi, id]
+    [apiType, id]
   )
 
   // Guarda durante la reproducción, como mucho cada 5 segundos.
-  const alTiempo = useCallback(
-    (posicion, duracion) => {
-      ultimaPosicionRef.current = posicion
-      ultimaDuracionRef.current = duracion
-      if (posicion - ultimoGuardado.current >= INTERVALO_GUARDADO) {
-        ultimoGuardado.current = posicion
-        guardar(posicion, duracion)
+  const handleTimeUpdate = useCallback(
+    (position, duration) => {
+      lastPositionRef.current = position
+      lastDurationRef.current = duration
+      if (position - lastSaved.current >= SAVE_INTERVAL) {
+        lastSaved.current = position
+        save(position, duration)
       }
     },
-    [guardar]
+    [save]
   )
 
   // Guarda al salir de la página con la última posición conocida.
-  const alSalir = useCallback(() => {
-    if (ultimaDuracionRef.current) {
-      guardar(ultimaPosicionRef.current, ultimaDuracionRef.current)
+  const handleExit = useCallback(() => {
+    if (lastDurationRef.current) {
+      save(lastPositionRef.current, lastDurationRef.current)
     }
-  }, [guardar])
+  }, [save])
 
   useEffect(() => {
-    const alOcultar = () => alSalir()
-    window.addEventListener('beforeunload', alSalir)
-    document.addEventListener('visibilitychange', alOcultar)
+    const handleVisibilityChange = () => handleExit()
+    window.addEventListener('beforeunload', handleExit)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => {
-      alSalir()
-      window.removeEventListener('beforeunload', alSalir)
-      document.removeEventListener('visibilitychange', alOcultar)
+      handleExit()
+      window.removeEventListener('beforeunload', handleExit)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [alSalir])
+  }, [handleExit])
 
-  if (!tipoApi) {
+  if (!apiType) {
     return (
-      <div className="reproductor">
+      <div className="player">
         <ErrorState message="Tipo de contenido no válido." />
       </div>
     )
   }
 
   return (
-    <div className="reproductor">
+    <div className="player">
       {error && <ErrorState message={error.message} />}
 
       <VideoPlayer
-        src={`/api/media/${tipoApi}/${id}/video/`}
-        titulo={titulo}
-        initialPosition={posicionReanudar}
+        src={`/api/media/${apiType}/${id}/video/`}
+        title={title}
+        initialPosition={resumePosition}
         onBack={() => navigate(-1)}
-        onTimeUpdate={alTiempo}
+        onTimeUpdate={handleTimeUpdate}
         onEnded={() =>
-          guardar(ultimaPosicionRef.current, ultimaDuracionRef.current, true)
+          save(lastPositionRef.current, lastDurationRef.current, true)
         }
         onError={() => setError(new Error('No se pudo cargar el vídeo.'))}
       />

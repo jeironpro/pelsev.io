@@ -1,11 +1,11 @@
-.contenido {
-  padding-top: calc(var(--alto-header) + 2 * var(--espacio-md));
-  padding-left: calc(var(--ancho-sidebar-colapsado) + 2 * var(--espacio-lg));
+.content {
+  padding-top: calc(var(--header-height) + 2 * var(--space-md));
+  padding-left: calc(var(--sidebar-width-collapsed) + 2 * var(--space-lg));
   min-height: 100vh;
 }
 
 @media (max-width: 768px) {
-  .contenido {
-    padding-left: calc(60px + 2 * var(--espacio-sm));
+  .content {
+    padding-left: calc(60px + 2 * var(--space-sm));
   }
 }

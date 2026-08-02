@@ -5,13 +5,13 @@ import { formatClock } from '../../utils/format'
 
 import './VideoPlayer.css'
 
-const VELOCIDADES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
-const OCULTAR_CONTROLES_MS = 3000
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+const HIDE_CONTROLS_MS = 3000
 
 // Reproductor de vídeo propio con controles personalizados.
 export default function VideoPlayer({
   src,
-  titulo,
+  title,
   initialPosition = 0,
   onBack,
   onLoadedMetadata,
@@ -19,40 +19,40 @@ export default function VideoPlayer({
   onEnded,
   onError,
 }) {
-  const contenedorRef = useRef(null)
+  const containerRef = useRef(null)
   const videoRef = useRef(null)
-  const ocultarTimer = useRef(null)
-  const reanudadoRef = useRef(false)
-  const buscandoRef = useRef(false)
+  const hideTimer = useRef(null)
+  const resumedRef = useRef(false)
+  const seekingRef = useRef(false)
 
-  const [reproduciendo, setReproduciendo] = useState(false)
-  const [finalizado, setFinalizado] = useState(false)
-  const [cargando, setCargando] = useState(false)
-  const [mostrarControles, setMostrarControles] = useState(true)
-  const [posicion, setPosicion] = useState(0)
-  const [duracion, setDuracion] = useState(0)
-  const [volumen, setVolumen] = useState(1)
-  const [silenciado, setSilenciado] = useState(false)
-  const [velocidad, setVelocidad] = useState(1)
+  const [playing, setPlaying] = useState(false)
+  const [finished, setFinished] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [showControls, setShowControls] = useState(true)
+  const [position, setPosition] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [volume, setVolume] = useState(1)
+  const [muted, setMuted] = useState(false)
+  const [speed, setSpeed] = useState(1)
 
   // Muestra los controles y programa su ocultación al reproducir.
-  const mostrar = useCallback(() => {
-    setMostrarControles(true)
-    clearTimeout(ocultarTimer.current)
+  const show = useCallback(() => {
+    setShowControls(true)
+    clearTimeout(hideTimer.current)
     const video = videoRef.current
     if (video && !video.paused) {
-      ocultarTimer.current = setTimeout(
-        () => setMostrarControles(false),
-        OCULTAR_CONTROLES_MS
+      hideTimer.current = setTimeout(
+        () => setShowControls(false),
+        HIDE_CONTROLS_MS
       )
     }
   }, [])
 
   useEffect(() => {
-    return () => clearTimeout(ocultarTimer.current)
+    return () => clearTimeout(hideTimer.current)
   }, [])
 
-  const alternar = useCallback(() => {
+  const toggle = useCallback(() => {
     const video = videoRef.current
     if (!video) return
     if (video.paused) {
@@ -60,192 +60,192 @@ export default function VideoPlayer({
     } else {
       video.pause()
     }
-    mostrar()
-  }, [mostrar])
+    show()
+  }, [show])
 
-  const saltar = useCallback(
-    (segundos) => {
+  const seek = useCallback(
+    (seconds) => {
       const video = videoRef.current
       if (!video) return
-      video.currentTime = Math.max(0, video.currentTime + segundos)
-      mostrar()
+      video.currentTime = Math.max(0, video.currentTime + seconds)
+      show()
     },
-    [mostrar]
+    [show]
   )
 
-  const alternarMudo = useCallback(() => {
+  const toggleMute = useCallback(() => {
     const video = videoRef.current
     if (!video) return
     const nuevo = !video.muted
     video.muted = nuevo
-    setSilenciado(nuevo)
+    setMuted(nuevo)
     if (!nuevo && video.volume === 0) {
       video.volume = 1
-      setVolumen(1)
+      setVolume(1)
     }
-    mostrar()
-  }, [mostrar])
+    show()
+  }, [show])
 
-  const cambiarVolumen = useCallback((valor) => {
+  const changeVolume = useCallback((value) => {
     const video = videoRef.current
-    setVolumen(valor)
-    setSilenciado(valor === 0)
+    setVolume(value)
+    setMuted(value === 0)
     if (video) {
-      video.volume = valor
-      video.muted = valor === 0
+      video.volume = value
+      video.muted = value === 0
     }
   }, [])
 
-  const cambiarVelocidad = useCallback(
-    (valor) => {
-      setVelocidad(valor)
-      if (videoRef.current) videoRef.current.playbackRate = valor
-      mostrar()
+  const changeSpeed = useCallback(
+    (value) => {
+      setSpeed(value)
+      if (videoRef.current) videoRef.current.playbackRate = value
+      show()
     },
-    [mostrar]
+    [show]
   )
 
-  const alternarPantallaCompleta = useCallback(() => {
-    const contenedor = contenedorRef.current
-    if (!contenedor) return
+  const toggleFullscreen = useCallback(() => {
+    const container = containerRef.current
+    if (!container) return
     if (!document.fullscreenElement) {
-      contenedor.requestFullscreen?.()
+      container.requestFullscreen?.()
     } else {
       document.exitFullscreen?.()
     }
-    mostrar()
-  }, [mostrar])
+    show()
+  }, [show])
 
-  const alTeclado = useCallback(
+  const handleKeyDown = useCallback(
     (event) => {
       switch (event.code) {
         case 'Space':
           event.preventDefault()
-          alternar()
+          toggle()
           break
         case 'ArrowRight':
-          saltar(5)
+          seek(5)
           break
         case 'ArrowLeft':
-          saltar(-5)
+          seek(-5)
           break
         case 'KeyM':
-          alternarMudo()
+          toggleMute()
           break
         case 'KeyF':
-          alternarPantallaCompleta()
+          toggleFullscreen()
           break
         default:
           break
       }
     },
-    [alternar, saltar, alternarMudo, alternarPantallaCompleta]
+    [toggle, seek, toggleMute, toggleFullscreen]
   )
 
-  const alMetadatos = useCallback(() => {
+  const handleLoadedMetadata = useCallback(() => {
     const video = videoRef.current
     if (!video) return
-    setDuracion(video.duration)
+    setDuration(video.duration)
     onLoadedMetadata?.(video.duration)
-    if (initialPosition > 0 && !reanudadoRef.current) {
+    if (initialPosition > 0 && !resumedRef.current) {
       video.currentTime = Math.min(initialPosition, video.duration - 5)
-      reanudadoRef.current = true
+      resumedRef.current = true
     }
   }, [initialPosition, onLoadedMetadata])
 
   // Reanuda si la posición llega después de cargar los metadatos.
   useEffect(() => {
     const video = videoRef.current
-    if (!video || reanudadoRef.current || video.readyState < 1) return
+    if (!video || resumedRef.current || video.readyState < 1) return
     if (initialPosition > 0) {
       video.currentTime = Math.min(initialPosition, video.duration - 5)
-      reanudadoRef.current = true
+      resumedRef.current = true
     }
   }, [initialPosition])
 
-  const alTiempo = useCallback(() => {
+  const handleTimeUpdate = useCallback(() => {
     const video = videoRef.current
     if (!video) return
-    if (!buscandoRef.current) {
-      setPosicion(video.currentTime)
+    if (!seekingRef.current) {
+      setPosition(video.currentTime)
     }
     onTimeUpdate?.(video.currentTime, video.duration)
   }, [onTimeUpdate])
 
-  const alBuscar = useCallback(
+  const handleSeek = useCallback(
     (event) => {
       const video = videoRef.current
-      const valor = Number(event.target.value)
-      if (video) video.currentTime = valor
-      setPosicion(valor)
-      onTimeUpdate?.(valor, duracion)
+      const value = Number(event.target.value)
+      if (video) video.currentTime = value
+      setPosition(value)
+      onTimeUpdate?.(value, duration)
     },
-    [duracion, onTimeUpdate]
+    [duration, onTimeUpdate]
   )
 
   return (
     <div
-      className={`reproductor-video ${
-        mostrarControles ? 'reproductor-video--controles' : ''
+      className={`video-player ${
+        showControls ? 'video-player--controls' : ''
       }`}
-      ref={contenedorRef}
-      onMouseMove={mostrar}
-      onKeyDown={alTeclado}
+      ref={containerRef}
+      onMouseMove={show}
+      onKeyDown={handleKeyDown}
       tabIndex={0}
     >
       <video
         ref={videoRef}
-        className="reproductor-video__elemento"
+        className="video-player__element"
         src={src}
         preload="auto"
         autoPlay
-        onClick={alternar}
+        onClick={toggle}
         onPlay={() => {
-          setReproduciendo(true)
-          setFinalizado(false)
-          mostrar()
+          setPlaying(true)
+          setFinished(false)
+          show()
         }}
         onPause={() => {
-          setReproduciendo(false)
-          setMostrarControles(true)
+          setPlaying(false)
+          setShowControls(true)
         }}
-        onTimeUpdate={alTiempo}
-        onLoadedMetadata={alMetadatos}
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
         onEnded={() => {
-          setFinalizado(true)
+          setFinished(true)
           onEnded?.()
         }}
-        onWaiting={() => setCargando(true)}
-        onPlaying={() => setCargando(false)}
+        onWaiting={() => setLoading(true)}
+        onPlaying={() => setLoading(false)}
         onError={onError}
       />
 
-      {cargando && (
-        <div className="reproductor-video__cargando">
+      {loading && (
+        <div className="video-player__loading">
           <Spinner label="" />
         </div>
       )}
 
-      {!cargando && !reproduciendo && (
+      {!loading && !playing && (
         <button
           type="button"
-          className="reproductor-video__play-grande"
-          onClick={alternar}
-          aria-label={finalizado ? 'Reanudar' : 'Reproducir'}
+          className="video-player__big-play"
+          onClick={toggle}
+          aria-label={finished ? 'Reanudar' : 'Reproducir'}
         >
           <span className="material-icons" aria-hidden="true">
-            {finalizado ? 'replay' : 'play_arrow'}
+            {finished ? 'replay' : 'play_arrow'}
           </span>
         </button>
       )}
 
-      {mostrarControles && (
+      {showControls && (
         <>
-          <div className="reproductor-video__barra-superior">
+          <div className="video-player__top-bar">
             {onBack && (
               <button
                 type="button"
-                className="reproductor-video__boton"
+                className="video-player__button"
                 onClick={onBack}
                 aria-label="Volver"
               >
@@ -254,11 +254,11 @@ export default function VideoPlayer({
                 </span>
               </button>
             )}
-            {titulo && <h2 className="reproductor-video__titulo">{titulo}</h2>}
+            {title && <h2 className="video-player__title">{title}</h2>}
             <button
               type="button"
-              className="reproductor-video__boton"
-              onClick={alternarPantallaCompleta}
+              className="video-player__button"
+              onClick={toggleFullscreen}
               aria-label="Pantalla completa"
             >
               <span className="material-icons" aria-hidden="true">
@@ -267,46 +267,46 @@ export default function VideoPlayer({
             </button>
           </div>
 
-          <div className="reproductor-video__barra-inferior">
+          <div className="video-player__bottom-bar">
             <input
               type="range"
-              className="reproductor-video__progreso"
+              className="video-player__progress"
               min={0}
-              max={duracion || 0}
+              max={duration || 0}
               step={1}
-              value={posicion}
+              value={position}
               style={{
-                '--progreso': duracion ? `${(posicion / duracion) * 100}%` : '0%',
+                '--progress': duration ? `${(position / duration) * 100}%` : '0%',
               }}
-              onChange={alBuscar}
+              onChange={handleSeek}
               onMouseDown={() => {
-                buscandoRef.current = true
+                seekingRef.current = true
               }}
               onMouseUp={() => {
-                buscandoRef.current = false
+                seekingRef.current = false
               }}
               onBlur={() => {
-                buscandoRef.current = false
+                seekingRef.current = false
               }}
               aria-label="Barra de progreso"
             />
 
-            <div className="reproductor-video__controles">
+            <div className="video-player__controls">
               <button
                 type="button"
-                className="reproductor-video__boton"
-                onClick={alternar}
-                aria-label={reproduciendo ? 'Pausar' : 'Reproducir'}
+                className="video-player__button"
+                onClick={toggle}
+                aria-label={playing ? 'Pausar' : 'Reproducir'}
               >
                 <span className="material-icons" aria-hidden="true">
-                  {reproduciendo ? 'pause' : 'play_arrow'}
+                  {playing ? 'pause' : 'play_arrow'}
                 </span>
               </button>
 
               <button
                 type="button"
-                className="reproductor-video__boton"
-                onClick={() => saltar(-10)}
+                className="video-player__button"
+                onClick={() => seek(-10)}
                 aria-label="Retroceder 10 segundos"
               >
                 <span className="material-icons" aria-hidden="true">
@@ -316,8 +316,8 @@ export default function VideoPlayer({
 
               <button
                 type="button"
-                className="reproductor-video__boton"
-                onClick={() => saltar(10)}
+                className="video-player__button"
+                onClick={() => seek(10)}
                 aria-label="Avanzar 10 segundos"
               >
                 <span className="material-icons" aria-hidden="true">
@@ -325,43 +325,43 @@ export default function VideoPlayer({
                 </span>
               </button>
 
-              <div className="reproductor-video__volumen">
+              <div className="video-player__volume">
                 <button
                   type="button"
-                  className="reproductor-video__boton"
-                  onClick={alternarMudo}
-                  aria-label={silenciado ? 'Activar sonido' : 'Silenciar'}
+                  className="video-player__button"
+                  onClick={toggleMute}
+                  aria-label={muted ? 'Activar sonido' : 'Silenciar'}
                 >
                   <span className="material-icons" aria-hidden="true">
-                    {silenciado || volumen === 0 ? 'volume_off' : 'volume_up'}
+                    {muted || volume === 0 ? 'volume_off' : 'volume_up'}
                   </span>
                 </button>
                 <input
                   type="range"
-                  className="reproductor-video__control-volumen"
+                  className="video-player__volume-control"
                   min={0}
                   max={1}
                   step={0.05}
-                  value={volumen}
-                  style={{ '--volumen': `${volumen * 100}%` }}
-                  onChange={(event) => cambiarVolumen(Number(event.target.value))}
+                  value={volume}
+                  style={{ '--volume': `${volume * 100}%` }}
+                  onChange={(event) => changeVolume(Number(event.target.value))}
                   aria-label="Volumen"
                 />
               </div>
 
-              <span className="reproductor-video__tiempo">
-                {formatClock(posicion)} / {formatClock(duracion)}
+              <span className="video-player__time">
+                {formatClock(position)} / {formatClock(duration)}
               </span>
 
               <select
-                className="reproductor-video__velocidad"
-                value={velocidad}
-                onChange={(event) => cambiarVelocidad(Number(event.target.value))}
+                className="video-player__speed"
+                value={speed}
+                onChange={(event) => changeSpeed(Number(event.target.value))}
                 aria-label="Velocidad de reproducción"
               >
-                {VELOCIDADES.map((valor) => (
-                  <option key={valor} value={valor}>
-                    {valor}x
+                {SPEEDS.map((value) => (
+                  <option key={value} value={value}>
+                    {value}x
                   </option>
                 ))}
               </select>

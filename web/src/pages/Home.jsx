@@ -14,103 +14,103 @@ import { progressService } from '../services/progressService'
 
 // Página de inicio: categorías, "Continuar viendo" y secciones por categoría.
 export default function Home() {
-  const [catalogo, setCatalogo] = useState(null)
-  const [continuar, setContinuar] = useState([])
-  const [cargando, setCargando] = useState(true)
+  const [catalog, setCatalog] = useState(null)
+  const [continueWatching, setContinueWatching] = useState([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const cargar = useCallback(async () => {
-    setCargando(true)
+  const load = useCallback(async () => {
+    setLoading(true)
     setError(null)
     try {
-      const [homeData, continuarData] = await Promise.all([
+      const [homeData, continueWatchingData] = await Promise.all([
         catalogService.home(),
         progressService.continueWatching(),
       ])
-      setCatalogo(homeData)
-      setContinuar(continuarData)
+      setCatalog(homeData)
+      setContinueWatching(continueWatchingData)
     } catch (err) {
       setError(err)
     } finally {
-      setCargando(false)
+      setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    cargar()
-  }, [cargar])
+    load()
+  }, [load])
 
   // Elimina un elemento de "Continuar viendo".
-  const quitar = async (id) => {
+  const remove = async (id) => {
     try {
       await progressService.remove(id)
-      setContinuar((actual) => actual.filter((item) => item.id !== id))
+      setContinueWatching((current) => current.filter((item) => item.id !== id))
     } catch {
       // Se mantiene la lista original si falla la petición.
     }
   }
 
-  if (cargando && !catalogo) {
+  if (loading && !catalog) {
     return (
-      <div className="cargando">
+      <div className="loading">
         <Spinner />
       </div>
     )
   }
 
-  if (error && !catalogo) {
+  if (error && !catalog) {
     return (
-      <div className="pagina">
-        <ErrorState message={error.message} onRetry={cargar} />
+      <div className="page">
+        <ErrorState message={error.message} onRetry={load} />
       </div>
     )
   }
 
-  const categorias = catalogo?.categories ?? []
+  const categories = catalog?.categories ?? []
 
   return (
-    <div className="pagina">
-      {categorias.length > 0 && (
-        <HorizontalRow titulo="Categorías">
-          {categorias.map((categoria) => (
-            <CategoryCard key={categoria.slug} category={categoria} />
+    <div className="page">
+      {categories.length > 0 && (
+        <HorizontalRow title="Categorías">
+          {categories.map((category) => (
+            <CategoryCard key={category.slug} category={category} />
           ))}
         </HorizontalRow>
       )}
 
-      {continuar.length > 0 && (
-        <HorizontalRow titulo="Continuar viendo">
-          {continuar.map((item) => (
-            <ContinueWatchingCard key={item.id} item={item} onRemove={quitar} />
+      {continueWatching.length > 0 && (
+        <HorizontalRow title="Continuar viendo">
+          {continueWatching.map((item) => (
+            <ContinueWatchingCard key={item.id} item={item} onRemove={remove} />
           ))}
         </HorizontalRow>
       )}
 
-      {catalogo?.sagas?.length > 0 && (
-        <HorizontalRow titulo="Sagas">
-          {catalogo.sagas.map((saga) => (
-            <ContentCard key={saga.id} item={saga.movies[0] || {}} tipo="pelicula" />
+      {catalog?.sagas?.length > 0 && (
+        <HorizontalRow title="Sagas">
+          {catalog.sagas.map((saga) => (
+            <ContentCard key={saga.id} item={saga.movies[0] || {}} type="pelicula" />
           ))}
         </HorizontalRow>
       )}
 
-      {categorias.length === 0 && <EmptyState message="No hay contenido disponible." />}
+      {categories.length === 0 && <EmptyState message="No hay contenido disponible." />}
 
-      {categorias.map((categoria) => {
+      {categories.map((category) => {
         const items = [
-          ...categoria.movies.map((p) => ({ ...p, tipo: 'pelicula' })),
-          ...categoria.series.map((s) => ({ ...s, tipo: 'series' })),
+          ...category.movies.map((m) => ({ ...m, type: 'pelicula' })),
+          ...category.series.map((s) => ({ ...s, type: 'series' })),
         ]
         return (
-          <HorizontalRow key={categoria.slug} titulo={categoria.name}>
+          <HorizontalRow key={category.slug} title={category.name}>
             {items.length === 0 ? (
               <EmptyState message="Aún no hay títulos en esta categoría." />
             ) : (
               items.map((item) => (
                 <ContentCard
-                  key={`${item.tipo}-${item.id}`}
+                  key={`${item.type}-${item.id}`}
                   item={item}
-                  tipo={item.tipo === 'pelicula' ? 'pelicula' : 'serie'}
+                  type={item.type === 'pelicula' ? 'pelicula' : 'serie'}
                 />
               ))
             )}

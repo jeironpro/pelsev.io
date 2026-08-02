@@ -1,43 +1,43 @@
 /* Tarjeta de episodio. */
-.episodio {
-  padding: var(--espacio-md);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-md);
-  background-color: var(--color-superficie);
+.episode {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
   cursor: pointer;
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
 }
 
-.episodio:hover {
-  border-color: var(--color-texto-secundario);
+.episode:hover {
+  border-color: var(--color-text-secondary);
   transform: translateY(-2px);
 }
 
-.episodio__encabezado {
+.episode__header {
   display: flex;
   align-items: baseline;
-  gap: var(--espacio-md);
+  gap: var(--space-md);
 }
 
-.episodio__numero {
+.episode__number {
   font-weight: 700;
-  color: var(--color-acento);
+  color: var(--color-accent);
 }
 
-.episodio__titulo {
+.episode__title {
   flex: 1;
-  font-size: var(--tamano-cuerpo);
+  font-size: var(--size-body);
 }
 
-.episodio__duracion {
-  font-size: var(--tamano-pequeno);
-  color: var(--color-texto-secundario);
+.episode__duration {
+  font-size: var(--size-small);
+  color: var(--color-text-secondary);
 }
 
-.episodio__estado {
-  margin: var(--espacio-xs) 0 var(--espacio-md);
-  font-size: var(--tamano-pequeno);
-  color: var(--color-texto-secundario);
+.episode__status {
+  margin: var(--space-xs) 0 var(--space-md);
+  font-size: var(--size-small);
+  color: var(--color-text-secondary);
 }

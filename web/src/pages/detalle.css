@@ -1,12 +1,12 @@
 /* Detalle de película. */
-.detalle {
+.detail {
   position: relative;
-  min-height: calc(100vh - var(--alto-header));
+  min-height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
 }
 
-.detalle__fondo {
+.detail__background {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -17,49 +17,49 @@
   filter: blur(2px);
 }
 
-.detalle__cuerpo {
+.detail__body {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: var(--espacio-xl);
+  padding: var(--space-xl);
 }
 
-.detalle__titulo {
-  font-size: var(--tamano-titulo-hero);
+.detail__title {
+  font-size: var(--size-title-hero);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 
-.detalle__descripcion {
+.detail__description {
   max-width: 560px;
-  color: var(--color-texto-secundario);
+  color: var(--color-text-secondary);
 }
 
-.detalle__reproducir {
+.detail__play {
   align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--espacio-md);
+  gap: var(--space-md);
 }
 
-.detalle__reproducir .material-icons {
+.detail__play .material-icons {
   font-size: 5rem;
-  color: var(--color-acento);
+  color: var(--color-accent);
   transition: transform 0.2s ease;
 }
 
-.detalle__reproducir:hover .material-icons {
+.detail__play:hover .material-icons {
   transform: scale(1.1);
 }
 
-.detalle__duracion {
-  font-size: var(--tamano-cuerpo);
-  color: var(--color-texto);
+.detail__duration {
+  font-size: var(--size-body);
+  color: var(--color-text);
 }
 
 @media (max-width: 480px) {
-  .detalle__cuerpo {
-    padding: var(--espacio-lg) var(--espacio-md);
+  .detail__body {
+    padding: var(--space-lg) var(--space-md);
   }
 }

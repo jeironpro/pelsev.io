@@ -3,54 +3,54 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import './horizontalrow.css'
 
 // Fila de catálogo con desplazamiento lateral mediante botones.
-export default function HorizontalRow({ titulo, children }) {
-  const contenedorRef = useRef(null)
-  const [puedeAvanzar, setPuedeAvanzar] = useState(false)
-  const [puedeRetroceder, setPuedeRetroceder] = useState(false)
+export default function HorizontalRow({ title, children }) {
+  const containerRef = useRef(null)
+  const [canForward, setCanForward] = useState(false)
+  const [canBackward, setCanBackward] = useState(false)
 
-  const actualizarBotones = useCallback(() => {
-    const el = contenedorRef.current
+  const updateButtons = useCallback(() => {
+    const el = containerRef.current
     if (!el) return
-    const tolerancia = 1
-    setPuedeRetroceder(el.scrollLeft > tolerancia)
-    setPuedeAvanzar(el.scrollLeft + el.clientWidth < el.scrollWidth - tolerancia)
+    const tolerance = 1
+    setCanBackward(el.scrollLeft > tolerance)
+    setCanForward(el.scrollLeft + el.clientWidth < el.scrollWidth - tolerance)
   }, [])
 
   useEffect(() => {
-    const el = contenedorRef.current
+    const el = containerRef.current
     if (!el) return
-    actualizarBotones()
-    el.addEventListener('scroll', actualizarBotones, { passive: true })
-    window.addEventListener('resize', actualizarBotones)
+    updateButtons()
+    el.addEventListener('scroll', updateButtons, { passive: true })
+    window.addEventListener('resize', updateButtons)
     let observer = null
     if (typeof ResizeObserver !== 'undefined') {
-      observer = new ResizeObserver(actualizarBotones)
+      observer = new ResizeObserver(updateButtons)
       observer.observe(el)
     }
     return () => {
-      el.removeEventListener('scroll', actualizarBotones)
-      window.removeEventListener('resize', actualizarBotones)
+      el.removeEventListener('scroll', updateButtons)
+      window.removeEventListener('resize', updateButtons)
       observer?.disconnect()
     }
-  }, [actualizarBotones])
+  }, [updateButtons])
 
-  const desplazar = (direccion) => {
-    const el = contenedorRef.current
+  const scroll = (direction) => {
+    const el = containerRef.current
     if (!el) return
-    el.scrollBy({ left: direccion * el.clientWidth, behavior: 'smooth' })
+    el.scrollBy({ left: direction * el.clientWidth, behavior: 'smooth' })
   }
 
   return (
-    <section className="fila" aria-label={titulo}>
-      <div className="fila__cabecera">
-        <h2 className="fila__titulo">{titulo}</h2>
-        <div className="fila__controles">
+    <section className="row" aria-label={title}>
+      <div className="row__header">
+        <h2 className="row__title">{title}</h2>
+        <div className="row__controls">
           <button
             type="button"
-            className="fila__boton"
-            aria-label={`Retroceder en ${titulo}`}
-            disabled={!puedeRetroceder}
-            onClick={() => desplazar(-1)}
+            className="row__button"
+            aria-label={`Retroceder en ${title}`}
+            disabled={!canBackward}
+            onClick={() => scroll(-1)}
           >
             <span className="material-icons" aria-hidden="true">
               chevron_left
@@ -58,10 +58,10 @@ export default function HorizontalRow({ titulo, children }) {
           </button>
           <button
             type="button"
-            className="fila__boton"
-            aria-label={`Avanzar en ${titulo}`}
-            disabled={!puedeAvanzar}
-            onClick={() => desplazar(1)}
+            className="row__button"
+            aria-label={`Avanzar en ${title}`}
+            disabled={!canForward}
+            onClick={() => scroll(1)}
           >
             <span className="material-icons" aria-hidden="true">
               chevron_right
@@ -69,7 +69,7 @@ export default function HorizontalRow({ titulo, children }) {
           </button>
         </div>
       </div>
-      <div className="fila__contenedor" ref={contenedorRef}>
+      <div className="row__container" ref={containerRef}>
         {children}
       </div>
     </section>

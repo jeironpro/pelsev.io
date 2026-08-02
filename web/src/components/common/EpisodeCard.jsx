@@ -8,33 +8,33 @@ import ProgressBar from '../ui/ProgressBar'
 // Tarjeta de episodio con título, duración y estado de visualización.
 export default function EpisodeCard({ episode, serieId, seasonNumber }) {
   const navigate = useNavigate()
-  const destino = `/reproductor/episodio/${episode.id}`
-  const navegacion = { state: { titulo: episode.title, serieId, seasonNumber } }
+  const destiny = `/reproductor/episodio/${episode.id}`
+  const navigation = { state: { title: episode.title, serieId, seasonNumber } }
 
-  const estado =
+  const status =
     episode.progress && episode.progress.position_sec > 0
       ? `${formatDuration(episode.progress.position_sec)} vistos`
       : 'Sin empezar'
 
   return (
     <article
-      className="episodio"
+      className="episode"
       role="link"
       tabIndex={0}
-      onClick={() => navigate(destino, navegacion)}
+      onClick={() => navigate(destiny, navigation)}
       onKeyDown={(event) => {
-        if (event.key === 'Enter') navigate(destino, navegacion)
+        if (event.key === 'Enter') navigate(destiny, navigation)
       }}
       aria-label={`Episodio ${episode.number}: ${episode.title}`}
     >
-      <div className="episodio__encabezado">
-        <span className="episodio__numero">{episode.number}</span>
-        <h3 className="episodio__titulo">{episode.title}</h3>
-        <span className="episodio__duracion">
+      <div className="episode__header">
+        <span className="episode__number">{episode.number}</span>
+        <h3 className="episode__title">{episode.title}</h3>
+        <span className="episode__duration">
           {formatDuration(episode.duration_sec)}
         </span>
       </div>
-      <div className="episodio__estado">{estado}</div>
+      <div className="episode__status">{status}</div>
       <ProgressBar
         positionSec={episode.progress?.position_sec || 0}
         durationSec={episode.duration_sec}

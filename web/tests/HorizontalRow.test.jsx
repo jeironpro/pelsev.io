@@ -5,7 +5,7 @@ import HorizontalRow from '../src/components/common/HorizontalRow'
 
 function renderizar() {
   return render(
-    <HorizontalRow titulo="Acción">
+    <HorizontalRow title="Acción">
       <div>Tarjeta 1</div>
       <div>Tarjeta 2</div>
     </HorizontalRow>

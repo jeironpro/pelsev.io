@@ -12,69 +12,69 @@ import { formatDuration } from '../utils/format'
 export default function DetallePelicula() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [pelicula, setPelicula] = useState(null)
+  const [movie, setMovie] = useState(null)
   const [error, setError] = useState(null)
 
-  const cargar = useCallback(async () => {
+  const load = useCallback(async () => {
     setError(null)
     try {
-      setPelicula(await catalogService.movie(id))
+      setMovie(await catalogService.movie(id))
     } catch (err) {
       setError(err)
     }
   }, [id])
 
   useEffect(() => {
-    cargar()
-  }, [cargar])
+    load()
+  }, [load])
 
   if (error) {
     return (
-      <div className="pagina">
-        <ErrorState message={error.message} onRetry={cargar} />
+      <div className="page">
+        <ErrorState message={error.message} onRetry={load} />
       </div>
     )
   }
 
-  if (!pelicula) {
+  if (!movie) {
     return (
-      <div className="cargando">
+      <div className="loading">
         <Spinner />
       </div>
     )
   }
 
   return (
-    <div className="detalle">
+    <div className="detail">
       <img
-        className="detalle__fondo"
-        src={pelicula.thumbnail}
+        className="detail__background"
+        src={movie.thumbnail}
         alt=""
         aria-hidden="true"
       />
-      <div className="detalle__cuerpo">
-        <h1 className="detalle__titulo">{pelicula.title}</h1>
+      <div className="detail__body">
+        <h1 className="detail__title">{movie.title}</h1>
 
         <button
           type="button"
-          className="detalle__reproducir"
+          className="detail__play"
           onClick={() =>
-            navigate(`/reproductor/pelicula/${pelicula.id}`, {
-              state: { titulo: pelicula.title },
+            navigate(`/reproductor/pelicula/${movie.id}`, {
+              state: { title: movie.title },
             })
           }
-          aria-label={`Reproducir ${pelicula.title}`}
+          aria-label={`Reproducir ${movie.title}`}
         >
           <span className="material-icons" aria-hidden="true">
             play_circle
           </span>
-          <span className="detalle__duracion">
-            {formatDuration(pelicula.duration_sec)}
+          <span className="detail__duration">
+            {formatDuration(movie.duration_sec)}
           </span>
         </button>
 
-        {pelicula.description && (
-          <p className="detalle__descripcion">{pelicula.description}</p>
+        {movie.description && (
+          <p className="detail__description">{movie.description}</p>
         )}
       </div>
     </div>

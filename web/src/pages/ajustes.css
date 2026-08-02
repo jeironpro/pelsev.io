@@ -1,16 +1,16 @@
 /* Página de ajustes. */
-.ajustes__seccion {
+.settings__section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--espacio-md);
+  gap: var(--space-md);
   max-width: 560px;
 }
 
-.ajustes__seccion h2 {
-  font-size: var(--tamano-titulo-seccion);
+.settings__section h2 {
+  font-size: var(--size-title-section);
 }
 
-.ajustes__mensaje {
-  color: var(--color-exito);
+.settings__message {
+  color: var(--color-success);
 }

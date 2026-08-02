@@ -7,13 +7,13 @@ from apps.catalog.models import Category, Episode, Movie, Saga, Season, Series
 from apps.playback.models import Progress
 
 
-def media_url(request, tipo, pk, accion):
+def media_url(request, content_type, pk, action):
     """Construye la URL absoluta de un vídeo o miniatura."""
-    ruta = reverse(
-        "media-" + accion,
-        kwargs={"tipo": tipo, "pk": pk},
+    url = reverse(
+        "media-" + action,
+        kwargs={"content_type": content_type, "pk": pk},
     )
-    return request.build_absolute_uri(ruta)
+    return request.build_absolute_uri(url)
 
 
 class CategorySerializer(serializers.ModelSerializer):

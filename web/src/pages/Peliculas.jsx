@@ -8,47 +8,47 @@ import { catalogService } from '../services/catalogService'
 
 // Página de películas.
 export default function Peliculas() {
-  const [peliculas, setPeliculas] = useState(null)
+  const [movies, setMovies] = useState(null)
   const [error, setError] = useState(null)
 
-  const cargar = useCallback(async () => {
+  const load = useCallback(async () => {
     setError(null)
     try {
-      setPeliculas(await catalogService.movies())
+      setMovies(await catalogService.movies())
     } catch (err) {
       setError(err)
     }
   }, [])
 
   useEffect(() => {
-    cargar()
-  }, [cargar])
+    load()
+  }, [load])
 
   if (error) {
     return (
-      <div className="pagina">
-        <ErrorState message={error.message} onRetry={cargar} />
+      <div className="page">
+        <ErrorState message={error.message} onRetry={load} />
       </div>
     )
   }
 
-  if (!peliculas) {
+  if (!movies) {
     return (
-      <div className="cargando">
+      <div className="loading">
         <Spinner />
       </div>
     )
   }
 
   return (
-    <div className="pagina">
-      <h1 className="pagina__titulo">Películas</h1>
-      {peliculas.length === 0 ? (
+    <div className="page">
+      <h1 className="page__title">Películas</h1>
+      {movies.length === 0 ? (
         <EmptyState message="No hay películas disponibles." />
       ) : (
-        <div className="grid-catalogo">
-          {peliculas.map((pelicula) => (
-            <ContentCard key={pelicula.id} item={pelicula} tipo="pelicula" />
+        <div className="catalog-grid">
+          {movies.map((movie) => (
+            <ContentCard key={movie.id} item={movie} type="pelicula" />
           ))}
         </div>
       )}

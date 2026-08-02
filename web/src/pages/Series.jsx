@@ -8,47 +8,47 @@ import { catalogService } from '../services/catalogService'
 
 // Página de series.
 export default function Series() {
-  const [series, setSeries] = useState(null)
+  const [shows, setShows] = useState(null)
   const [error, setError] = useState(null)
 
-  const cargar = useCallback(async () => {
+  const load = useCallback(async () => {
     setError(null)
     try {
-      setSeries(await catalogService.series())
+      setShows(await catalogService.series())
     } catch (err) {
       setError(err)
     }
   }, [])
 
   useEffect(() => {
-    cargar()
-  }, [cargar])
+    load()
+  }, [load])
 
   if (error) {
     return (
-      <div className="pagina">
-        <ErrorState message={error.message} onRetry={cargar} />
+      <div className="page">
+        <ErrorState message={error.message} onRetry={load} />
       </div>
     )
   }
 
-  if (!series) {
+  if (!shows) {
     return (
-      <div className="cargando">
+      <div className="loading">
         <Spinner />
       </div>
     )
   }
 
   return (
-    <div className="pagina">
-      <h1 className="pagina__titulo">Series</h1>
-      {series.length === 0 ? (
+    <div className="page">
+      <h1 className="page__title">Series</h1>
+      {shows.length === 0 ? (
         <EmptyState message="No hay series disponibles." />
       ) : (
-        <div className="grid-catalogo">
-          {series.map((serie) => (
-            <ContentCard key={serie.id} item={serie} tipo="serie" />
+        <div className="catalog-grid">
+          {shows.map((show) => (
+            <ContentCard key={show.id} item={show} type="serie" />
           ))}
         </div>
       )}
