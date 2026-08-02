@@ -77,6 +77,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "pelsevio.wsgi.application"
 
+ASGI_APPLICATION = env("ASGI_APPLICATION", default="pelsevio.asgi.application")
+
 # Base de datos
 DB_PATH = Path(env("DB_PATH", default="db.sqlite3"))
 if not DB_PATH.is_absolute():
@@ -127,9 +129,7 @@ MEDIA_ROOT = MEDIA_ROOT.resolve()
 # Configuración de Django REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend"
-    ],  # noqa: E501
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",  # noqa: E501
     "PAGE_SIZE": None,
 }

@@ -16,11 +16,6 @@ class SagaAdmin(admin.ModelAdmin):
     list_display = ("title",)
 
 
-class MovieInline(admin.TabularInline):
-    model = Movie
-    extra = 0
-
-
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
     list_display = ("title", "saga", "duration_sec")

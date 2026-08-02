@@ -63,7 +63,6 @@ def test_contenido_inexistente_devuelve_404(client, populated):
 
 
 @pytest.mark.django_db
-@pytest.mark.django_db
 def test_archivo_inexistente_devuelve_404(client, media_root, populated):
     """Si el archivo no está en disco, devuelve 404."""
     movie = Movie.objects.first()
