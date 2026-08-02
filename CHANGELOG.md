@@ -8,6 +8,11 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Añadido
 
+- Reproductor de vídeo propio con controles personalizados: play/pausa, saltos de ±10s, barra de progreso, volumen, velocidad de reproducción, pantalla completa y atajos de teclado.
+- Página de categoría con las películas y series asociadas.
+- Tarjetas de categorías en la página de inicio (antes de "Continuar viendo").
+- Categorías por defecto creadas por migración aunque aún no tengan contenido.
+
 - Generación de miniaturas para series, temporadas y cada episodio con `scan_media --generate-thumbnails` (desde el vídeo de cada uno).
 - Limpieza de sagas huérfanas (sin películas) al reescanear.
 - Frontend web en React + Vite con el proyecto `pelsevio-web` en `web/`.
@@ -34,6 +39,9 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Cambiado
 
+- Cabecera flotante rediseñada sin el icono de perfil.
+- Panel lateral flotante siempre visible, colapsado con iconos y expandible al pasar el ratón, con el perfil arriba y los ajustes abajo.
+- La página de inicio muestra una sección por cada categoría aunque esté vacía.
 - Reescribir el README genérico inicial con la documentación real del proyecto.
 
 ### Corregido

@@ -39,6 +39,10 @@
   /* Cabecera */
   --alto-header: 64px;
 
+  /* Panel lateral */
+  --ancho-sidebar-colapsado: 68px;
+  --ancho-sidebar-expandido: 210px;
+
   /* Breakpoints */
   --bp-movil: 480px;
   --bp-tablet: 768px;

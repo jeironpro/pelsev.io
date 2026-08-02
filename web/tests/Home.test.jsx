@@ -68,13 +68,35 @@ describe('Home', () => {
     progressService.continueWatching.mockResolvedValue([])
   })
 
-  it('muestra las filas de sagas y categorías de la API', async () => {
+  it('muestra tarjetas de categorías, sagas y secciones con contenido', async () => {
     renderizar()
-    await waitFor(() => expect(screen.getByText('Sagas')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Categorías')).toBeInTheDocument())
+    expect(screen.getAllByText('Acción').length).toBeGreaterThan(0)
+    expect(screen.getByText('Sagas')).toBeInTheDocument()
     expect(screen.getByText('Una Nueva Esperanza')).toBeInTheDocument()
-    expect(screen.getByText('Acción')).toBeInTheDocument()
     expect(screen.getByText('El Padrino')).toBeInTheDocument()
     expect(screen.getByText('Breaking Bad')).toBeInTheDocument()
+  })
+
+  it('muestra una sección por categoría aunque esté vacía', async () => {
+    catalogService.home.mockResolvedValue({
+      categories: [
+        {
+          slug: 'terror',
+          name: 'Terror',
+          movies: [],
+          series: [],
+        },
+      ],
+      sagas: [],
+    })
+    renderizar()
+    await waitFor(() =>
+      expect(
+        screen.getByText('Aún no hay títulos en esta categoría.')
+      ).toBeInTheDocument()
+    )
+    expect(screen.getAllByText('Terror').length).toBeGreaterThan(0)
   })
 
   it('muestra "Continuar viendo" cuando hay progreso', async () => {
@@ -91,7 +113,9 @@ describe('Home', () => {
       },
     ])
     renderizar()
-    await waitFor(() => expect(screen.getByText('Continuar viendo')).toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.getByText('Continuar viendo')).toBeInTheDocument()
+    )
   })
 
   it('muestra estado vacío si no hay contenido', async () => {

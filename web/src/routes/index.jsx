@@ -5,6 +5,7 @@ import Spinner from '../components/ui/Spinner'
 
 // Carga diferida de las páginas para reducir el bundle inicial.
 const Home = lazy(() => import('../pages/Home'))
+const Categoria = lazy(() => import('../pages/Categoria'))
 const Peliculas = lazy(() => import('../pages/Peliculas'))
 const Series = lazy(() => import('../pages/Series'))
 const DetallePelicula = lazy(() => import('../pages/DetallePelicula'))
@@ -19,6 +20,7 @@ export default function AppRoutes() {
     <Suspense fallback={<Spinner />}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/categoria/:slug" element={<Categoria />} />
         <Route path="/peliculas" element={<Peliculas />} />
         <Route path="/series" element={<Series />} />
         <Route path="/pelicula/:id" element={<DetallePelicula />} />

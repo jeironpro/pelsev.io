@@ -17,19 +17,6 @@
   font-size: var(--tamano-titulo-seccion);
 }
 
-.reproductor__tiempo {
-  color: var(--color-texto-secundario);
-  font-variant-numeric: tabular-nums;
-}
-
-.reproductor__video {
-  width: 100%;
-  max-height: calc(100vh - 160px);
-  background-color: #000;
-  border-radius: var(--radio-md);
-  outline: none;
-}
-
 @media (max-width: 480px) {
   .reproductor {
     padding: var(--espacio-sm);

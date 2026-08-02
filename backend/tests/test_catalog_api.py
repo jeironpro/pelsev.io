@@ -53,7 +53,7 @@ def test_filtro_por_categoria(client, populated):
     """El filtro por categoría devuelve solo el contenido asociado."""
     from apps.catalog.models import Category
 
-    category = Category.objects.create(slug="accion", name="Acción")
+    category = Category.objects.create(slug="western", name="Western")
     movie = Movie.objects.first()
     movie.categories.add(category)
     response = client.get(f"/api/catalog/movies/?category={category.slug}")
