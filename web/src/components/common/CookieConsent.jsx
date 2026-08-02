@@ -1,65 +1,39 @@
-// Banner de consentimiento de cookies.
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+
+import Button from '../ui/Button'
 
 export default function CookieConsent() {
-  const [showBanner, setShowBanner] = useState(() => {
-    // Comprobar si ya existe consentimiento en localStorage
-    return !(
+  const [visible, setVisible] = useState(() => {
+    return (
       typeof window !== 'undefined' &&
-      localStorage.getItem('cookieConsentAccepted') === 'true'
+      localStorage.getItem('cookieConsentAccepted') !== 'true'
     )
   })
 
-  const handleAccept = () => {
-    // Guardar consentimiento y ocultar banner
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('cookieConsentAccepted', 'true')
-    }
-    setShowBanner(false)
+  const accept = () => {
+    localStorage.setItem('cookieConsentAccepted', 'true')
+    setVisible(false)
   }
 
-  useEffect(() => {
-    // Si el banner no debería mostrarse, salir temprano
-    if (!showBanner) return
-
-    // Enfocar el botón de aceptación cuando se monte
-    const acceptBtn = document.getElementById('cookie-consent-accept')
-    if (acceptBtn) {
-      acceptBtn.focus()
-    }
-  }, [showBanner])
-
-  if (!showBanner) {
-    return null
-  }
+  if (!visible) return null
 
   return (
-    <div className="cookie-consent" role="dialog" aria-modal="true">
-      <div className="cookie-consent__content">
-        <span className="material-icons" aria-hidden="true">
-          privacy_tip
-        </span>
-        <div className="cookie-consent__message">
-          <p>
-            Utilizamos cookies para mejorar tu experiencia en nuestro sitio. Al
-            continuar navegando, aceptas su uso.
-          </p>
-          <p className="cookie-consent__link">
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              Más información
-            </a>
-          </p>
-        </div>
-        <div className="cookie-consent__actions">
-          <button
-            type="button"
-            id="cookie-consent-accept"
-            className="button button--primary"
-            onClick={handleAccept}
-          >
-            Aceptar
-          </button>
-        </div>
+    <div className="cookie-banner" role="alert">
+      <span className="material-icons cookie-banner__icon" aria-hidden="true">
+        cookie
+      </span>
+      <div className="cookie-banner__body">
+        <p className="cookie-banner__text">
+          Usamos cookies propias y de terceros para mejorar tu experiencia.
+        </p>
+        <a href="#" className="cookie-banner__more" onClick={(e) => e.preventDefault()}>
+          Más información
+        </a>
+      </div>
+      <div className="cookie-banner__action">
+        <Button variant="primary" onClick={accept}>
+          Aceptar
+        </Button>
       </div>
     </div>
   )

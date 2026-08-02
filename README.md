@@ -153,7 +153,7 @@ Incluye hooks para el backend (black, isort, flake8), el frontend (eslint, prett
 
 ### Desarrollo con Docker Compose
 
-Construye y arranca el backend y el frontend (disponible en <http://localhost:8080>):
+Construye y arranca el backend y el frontend (disponible en <http://localhost:8081>):
 
 ```bash
 docker compose up --build
