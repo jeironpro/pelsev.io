@@ -72,5 +72,5 @@ Los vídeos no se sirven desde el servidor de aplicación en producción ideal, 
 ## Calidad
 
 - **Tests**: pytest + pytest-django en `tests/`.
-- **Estilo**: flake8, black e isort (ver `setup.cfg`).
+- **Estilo**: flake8, black e isort (configurados en `pyproject.toml`).
 - **Documentación API**: Swagger/OpenAPI en `/api/docs/` (drf-spectacular).

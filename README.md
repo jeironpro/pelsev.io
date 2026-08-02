@@ -61,8 +61,7 @@ Requisitos: Python 3.12+, `ffmpeg` y `ffprobe` en el PATH.
 cd backend
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements-dev.txt    # opcional: tests y lint
+pip install -e ".[dev]"    # incluye dependencias de desarrollo (tests y lint)
 cp .env.example .env
 ```
 
