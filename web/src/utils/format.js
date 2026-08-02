@@ -8,8 +8,8 @@ export function formatDuration(totalSeconds) {
   const rest = seconds % 60
 
   if (hours > 0) {
-    const minutos = minutes ? `${minutes}m` : ''
-    return `${hours}h ${minutos}`.trim()
+    const mins = minutes ? `${minutes}m` : ''
+    return `${hours}h ${mins}`.trim()
   }
   if (minutes > 0) {
     return `${minutes}m ${rest}s`

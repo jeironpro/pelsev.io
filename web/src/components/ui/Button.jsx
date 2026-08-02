@@ -1,11 +1,11 @@
 import './button.css'
 
 // Botón con variantes: primaria (acento) y secundaria (superficie).
-export default function Button({ children, variant = 'primaria', onClick, ...props }) {
+export default function Button({ children, variant = 'primary', onClick, ...props }) {
   return (
     <button
       type="button"
-      className={`boton boton--${variant}`}
+      className={`button button--${variant}`}
       onClick={onClick}
       {...props}
     >

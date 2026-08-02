@@ -69,9 +69,9 @@ def _range_response(path, request):
     return response
 
 
-def video(request, tipo, pk):
+def video(request, content_type, pk):
     """Devuelve el vídeo de una película o episodio."""
-    model = CONTENT_TYPES.get(tipo)
+    model = CONTENT_TYPES.get(content_type)
     if model not in (Movie, Episode):
         return HttpResponseNotFound("Tipo no válido para vídeo.")
     try:
@@ -86,9 +86,9 @@ def video(request, tipo, pk):
     return _range_response(path, request)
 
 
-def thumbnail(request, tipo, pk):
+def thumbnail(request, content_type, pk):
     """Devuelve la miniatura de una película, episodio o serie."""
-    model = CONTENT_TYPES.get(tipo)
+    model = CONTENT_TYPES.get(content_type)
     if model is None:
         return HttpResponseNotFound("Tipo no válido para miniatura.")
     try:

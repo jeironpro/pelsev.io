@@ -2,15 +2,15 @@
 .spinner {
   display: flex;
   align-items: center;
-  gap: var(--espacio-sm);
-  color: var(--color-texto-secundario);
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
 }
 
-.spinner__icono {
-  animation: spinner-girar 1s linear infinite;
+.spinner__icon {
+  animation: spinner-spin 1s linear infinite;
 }
 
-@keyframes spinner-girar {
+@keyframes spinner-spin {
   to {
     transform: rotate(360deg);
   }

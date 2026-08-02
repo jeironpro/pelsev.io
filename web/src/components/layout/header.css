@@ -1,59 +1,59 @@
 /* Cabecera flotante de pelsev.io. */
-.cabecera {
+.header {
   position: fixed;
-  top: var(--espacio-md);
+  top: var(--space-md);
   left: 50%;
   transform: translateX(-50%);
   z-index: 40;
-  height: var(--alto-header);
-  width: calc(100% - 2 * var(--espacio-lg));
+  height: var(--header-height);
+  width: calc(100% - 2 * var(--space-lg));
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 var(--espacio-lg);
-  border-radius: var(--radio-lg) var(--radio-lg) var(--radio-lg) 0;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 0;
   background-color: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(12px);
-  border: 1px solid var(--color-borde);
-  box-shadow: var(--sombra-flotante);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-float);
 }
 
-.cabecera__izquierda {
+.header__left {
   display: flex;
   align-items: center;
-  gap: var(--espacio-sm);
+  gap: var(--space-sm);
 }
 
-.cabecera__logo {
-  font-family: var(--fuente-titulo);
+.header__logo {
+  font-family: var(--font-heading);
   font-size: 1.6rem;
   letter-spacing: 1px;
-  color: var(--color-acento);
+  color: var(--color-accent);
 }
 
-.cabecera__nav {
+.header__nav {
   display: flex;
-  gap: var(--espacio-lg);
+  gap: var(--space-lg);
 }
 
-.cabecera__enlace {
-  padding: var(--espacio-sm) 0;
-  color: var(--color-texto-secundario);
+.header__link {
+  padding: var(--space-sm) 0;
+  color: var(--color-text-secondary);
   transition: color 0.2s ease;
 }
 
-.cabecera__enlace:hover,
-.cabecera__enlace.activo {
-  color: var(--color-texto);
+.header__link:hover,
+.header__link.active {
+  color: var(--color-text);
 }
 
 @media (max-width: 480px) {
-  .cabecera {
+  .header {
     grid-template-columns: auto 1fr auto;
-    padding: 0 var(--espacio-md);
+    padding: 0 var(--space-md);
   }
 
-  .cabecera__nav {
-    gap: var(--espacio-md);
+  .header__nav {
+    gap: var(--space-md);
   }
 }

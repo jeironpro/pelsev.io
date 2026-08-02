@@ -2,39 +2,39 @@ import './sidebar.css'
 
 import { NavLink } from 'react-router-dom'
 
-const enlaces = [
-  { to: '/', label: 'Inicio', icono: 'home' },
-  { to: '/peliculas', label: 'Películas', icono: 'movie' },
-  { to: '/series', label: 'Series', icono: 'tv' },
+const links = [
+  { to: '/', label: 'Inicio', icon: 'home' },
+  { to: '/peliculas', label: 'Películas', icon: 'movie' },
+  { to: '/series', label: 'Series', icon: 'tv' },
 ]
 
 // Panel lateral flotante, siempre visible: colapsado con iconos y expandido al hover.
 export default function Sidebar() {
   return (
     <aside className="sidebar" aria-label="Menú lateral">
-      <div className="sidebar__perfil">
+      <div className="sidebar__profile">
         <span className="material-icons sidebar__avatar" aria-hidden="true">
           account_circle
         </span>
-        <span className="sidebar__texto">Usuario</span>
+        <span className="sidebar__text">Usuario</span>
       </div>
 
       <nav className="sidebar__nav" aria-label="Navegación">
-        {enlaces.map((enlace) => (
-          <NavLink key={enlace.to} to={enlace.to} className="sidebar__enlace">
+        {links.map((link) => (
+          <NavLink key={link.to} to={link.to} className="sidebar__link">
             <span className="material-icons" aria-hidden="true">
-              {enlace.icono}
+              {link.icon}
             </span>
-            <span className="sidebar__texto">{enlace.label}</span>
+            <span className="sidebar__text">{link.label}</span>
           </NavLink>
         ))}
       </nav>
 
-      <NavLink to="/ajustes" className="sidebar__enlace sidebar__ajustes">
+      <NavLink to="/ajustes" className="sidebar__link sidebar__settings">
         <span className="material-icons" aria-hidden="true">
           settings
         </span>
-        <span className="sidebar__texto">Ajustes</span>
+        <span className="sidebar__text">Ajustes</span>
       </NavLink>
     </aside>
   )

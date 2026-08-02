@@ -1,13 +1,13 @@
-.estado-vacio {
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--espacio-md);
-  padding: var(--espacio-xl);
-  color: var(--color-texto-secundario);
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  color: var(--color-text-secondary);
   text-align: center;
 }
 
-.estado-vacio .material-icons {
+.empty-state .material-icons {
   font-size: 3rem;
 }

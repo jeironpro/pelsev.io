@@ -22,12 +22,12 @@ router.register(
 # Rutas manuales de entrega de archivos media.
 media_urlpatterns = [
     path(
-        "media/<str:tipo>/<int:pk>/video/",
+        "media/<str:content_type>/<int:pk>/video/",
         media_views.video,
         name="media-video",
     ),
     path(
-        "media/<str:tipo>/<int:pk>/thumbnail/",
+        "media/<str:content_type>/<int:pk>/thumbnail/",
         media_views.thumbnail,
         name="media-thumbnail",
     ),

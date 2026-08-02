@@ -12,77 +12,77 @@ import { catalogService } from '../services/catalogService'
 // Página de una categoría: películas y series asociadas.
 export default function Categoria() {
   const { slug } = useParams()
-  const [categorias, setCategorias] = useState(null)
+  const [categories, setCategories] = useState(null)
   const [error, setError] = useState(null)
 
-  const cargar = useCallback(async () => {
+  const load = useCallback(async () => {
     setError(null)
     try {
       const data = await catalogService.home()
-      setCategorias(data.categories)
+      setCategories(data.categories)
     } catch (err) {
       setError(err)
     }
   }, [])
 
   useEffect(() => {
-    cargar()
-  }, [cargar])
+    load()
+  }, [load])
 
   if (error) {
     return (
-      <div className="pagina">
-        <ErrorState message={error.message} onRetry={cargar} />
+      <div className="page">
+        <ErrorState message={error.message} onRetry={load} />
       </div>
     )
   }
 
-  if (!categorias) {
+  if (!categories) {
     return (
-      <div className="cargando">
+      <div className="loading">
         <Spinner />
       </div>
     )
   }
 
-  const categoria = categorias.find((c) => c.slug === slug)
+  const category = categories.find((c) => c.slug === slug)
 
-  if (!categoria) {
+  if (!category) {
     return (
-      <div className="pagina">
+      <div className="page">
         <EmptyState message="No se encontró esta categoría." />
       </div>
     )
   }
 
-  const peliculas = categoria.movies
-  const series = categoria.series
+  const movies = category.movies
+  const shows = category.series
 
   return (
-    <div className="pagina">
-      <h1 className="pagina__titulo">{categoria.name}</h1>
+    <div className="page">
+      <h1 className="page__title">{category.name}</h1>
 
-      <section className="categoria__seccion">
-        <h2 className="pagina__titulo categoria__sub">Películas</h2>
-        {peliculas.length === 0 ? (
+      <section className="category__section">
+        <h2 className="page__title category__subtitle">Películas</h2>
+        {movies.length === 0 ? (
           <EmptyState message="No hay películas en esta categoría." />
         ) : (
-          <div className="grid-catalogo">
-            {peliculas.map((pelicula) => (
-              <ContentCard key={pelicula.id} item={pelicula} tipo="pelicula" />
+          <div className="catalog-grid">
+            {movies.map((movie) => (
+              <ContentCard key={movie.id} item={movie} type="pelicula" />
             ))}
           </div>
         )}
       </section>
 
-      <section className="categoria__seccion">
-        <h2 className="pagina__titulo categoria__sub">Series</h2>
-        {series.length === 0 ? (
+      <section className="category__section">
+        <h2 className="page__title category__subtitle">Series</h2>
+        {shows.length === 0 ? (
           <EmptyState message="No hay series en esta categoría." />
         ) : (
-          <div className="grid-catalogo">
-            {series.map((serie) => (
-              <ContentCard key={serie.id} item={serie} tipo="serie" />
+          <div className="catalog-grid">
+            {shows.map((show) => (
+              <ContentCard key={show.id} item={show} type="serie" />
             ))}
           </div>
         )}

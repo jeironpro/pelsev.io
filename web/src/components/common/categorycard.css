@@ -1,49 +1,49 @@
 /* Tarjeta de categoría del inicio. */
-.categoria-tarjeta {
+.category-card {
   flex: 0 0 180px;
   height: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--espacio-xs);
-  border-radius: var(--radio-lg);
+  gap: var(--space-xs);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  background-color: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  box-shadow: var(--sombra-tarjeta);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
   transition:
     transform 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease;
 }
 
-.categoria-tarjeta:hover,
-.categoria-tarjeta:focus-visible {
+.category-card:hover,
+.category-card:focus-visible {
   transform: translateY(-6px);
-  border-color: var(--color-acento);
-  box-shadow: var(--sombra-flotante);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-float);
   outline: none;
 }
 
-.categoria-tarjeta__icono {
+.category-card__icon {
   font-size: 2rem;
-  color: var(--color-acento);
+  color: var(--color-accent);
 }
 
-.categoria-tarjeta__nombre {
-  font-size: var(--tamano-titulo-tarjeta);
+.category-card__name {
+  font-size: var(--size-title-card);
   font-weight: 700;
   text-align: center;
 }
 
-.categoria-tarjeta__cantidad {
-  font-size: var(--tamano-pequeno);
-  color: var(--color-texto-secundario);
+.category-card__count {
+  font-size: var(--size-small);
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 480px) {
-  .categoria-tarjeta {
+  .category-card {
     flex-basis: 150px;
     height: 108px;
   }

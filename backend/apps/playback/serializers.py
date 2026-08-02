@@ -65,9 +65,9 @@ class ProgressSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-def media_url(request, tipo, pk, accion):
-    ruta = reverse("media-" + accion, kwargs={"tipo": tipo, "pk": pk})
-    return request.build_absolute_uri(ruta)
+def media_url(request, content_type, pk, action):
+    url = reverse("media-" + action, kwargs={"content_type": content_type, "pk": pk})
+    return request.build_absolute_uri(url)
 
 
 class ContinueWatchingSerializer(serializers.ModelSerializer):

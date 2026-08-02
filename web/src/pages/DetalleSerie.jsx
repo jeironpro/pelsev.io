@@ -14,81 +14,81 @@ import { catalogService } from '../services/catalogService'
 export default function DetalleSerie() {
   const { id } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
-  const temporadaParam = searchParams.get('temporada')
+  const seasonParam = searchParams.get('temporada')
 
-  const [serie, setSerie] = useState(null)
-  const [temporadaActiva, setTemporadaActiva] = useState(null)
+  const [series, setSeries] = useState(null)
+  const [activeSeason, setActiveSeason] = useState(null)
   const [error, setError] = useState(null)
 
-  const cargar = useCallback(async () => {
+  const load = useCallback(async () => {
     setError(null)
     try {
       const data = await catalogService.seriesDetail(id)
-      setSerie(data)
-      const resaltada = data.seasons.find((t) => String(t.number) === temporadaParam)
-      setTemporadaActiva(resaltada?.id ?? data.seasons?.[0]?.id ?? null)
+      setSeries(data)
+      const highlighted = data.seasons.find((s) => String(s.number) === seasonParam)
+      setActiveSeason(highlighted?.id ?? data.seasons?.[0]?.id ?? null)
     } catch (err) {
       setError(err)
     }
-  }, [id, temporadaParam])
+  }, [id, seasonParam])
 
   useEffect(() => {
-    cargar()
-  }, [cargar])
+    load()
+  }, [load])
 
   // Selecciona una temporada y la refleja en la URL para recuperarla al volver.
-  const seleccionarTemporada = (temporada) => {
-    setTemporadaActiva(temporada.id)
-    setSearchParams({ temporada: String(temporada.number) }, { replace: true })
+  const selectSeason = (season) => {
+    setActiveSeason(season.id)
+    setSearchParams({ temporada: String(season.number) }, { replace: true })
   }
 
   if (error) {
     return (
-      <div className="pagina">
-        <ErrorState message={error.message} onRetry={cargar} />
+      <div className="page">
+        <ErrorState message={error.message} onRetry={load} />
       </div>
     )
   }
 
-  if (!serie) {
+  if (!series) {
     return (
-      <div className="cargando">
+      <div className="loading">
         <Spinner />
       </div>
     )
   }
 
-  const temporada =
-    serie.seasons.find((t) => t.id === temporadaActiva) || serie.seasons[0]
+  const season =
+    series.seasons.find((s) => s.id === activeSeason) || series.seasons[0]
 
   return (
-    <div className="detalle">
-      <img className="detalle__fondo" src={serie.thumbnail} alt="" aria-hidden="true" />
-      <div className="detalle__cuerpo">
-        <h1 className="detalle__titulo">{serie.title}</h1>
-        {serie.description && (
-          <p className="detalle__descripcion">{serie.description}</p>
+    <div className="detail">
+      <img className="detail__background" src={series.thumbnail} alt="" aria-hidden="true" />
+      <div className="detail__body">
+        <h1 className="detail__title">{series.title}</h1>
+        {series.description && (
+          <p className="detail__description">{series.description}</p>
         )}
 
-        <div className="serie-detalle__temporadas">
-          {serie.seasons.map((t) => (
+        <div className="series-detail__seasons">
+          {series.seasons.map((s) => (
             <SeasonCard
-              key={t.id}
-              season={t}
-              activa={t.id === temporada?.id}
-              onSelect={() => seleccionarTemporada(t)}
+              key={s.id}
+              season={s}
+              active={s.id === season?.id}
+              onSelect={() => selectSeason(s)}
             />
           ))}
         </div>
 
-        {temporada && (
-          <div className="serie-detalle__episodios">
-            {temporada.episodes.map((episodio) => (
+        {season && (
+          <div className="series-detail__episodes">
+            {season.episodes.map((episode) => (
               <EpisodeCard
-                key={episodio.id}
-                episode={episodio}
-                serieId={serie.id}
-                seasonNumber={temporada.number}
+                key={episode.id}
+                episode={episode}
+                serieId={series.id}
+                seasonNumber={season.number}
               />
             ))}
           </div>
