@@ -39,6 +39,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - Configuración del backend unificada en `pyproject.toml` (dependencias, pytest, flake8, black e isort).
 - Lockfiles `requirements.txt` y `test-requirements.txt` generados desde `pyproject.toml` con pip-tools.
 - Yarn como gestor de paquetes del frontend con la versión fijada en `package.json` (Corepack) y lockfile `yarn.lock`.
+- Hooks de pre-commit con lint y formato para backend (black, isort, flake8) y frontend (eslint, prettier) más validaciones básicas.
 
 ### Cambiado
 
