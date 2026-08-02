@@ -1,9 +1,9 @@
 """Serializers de reproducción: escritura de progreso y "Continuar viendo"."""
 
-from django.urls import reverse
 from rest_framework import serializers
 
 from apps.catalog.models import Episode, Movie
+from apps.core.utils.helpers import media_url
 from apps.playback.models import Progress
 
 VALID_TYPES = {"movie", "episode"}
@@ -63,11 +63,6 @@ class ProgressSerializer(serializers.ModelSerializer):
         validated_data.pop("type", None)
         validated_data.pop("content_id", None)
         return super().update(instance, validated_data)
-
-
-def media_url(request, content_type, pk, action):
-    url = reverse("media-" + action, kwargs={"content_type": content_type, "pk": pk})
-    return request.build_absolute_uri(url)
 
 
 class ContinueWatchingSerializer(serializers.ModelSerializer):

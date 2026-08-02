@@ -89,8 +89,3 @@ def generate_thumbnail(video_path, output_path):
         return output_path
     except subprocess.CalledProcessError:
         return None
-
-
-def is_season(directory):
-    """Detecta si el directorio representa una temporada por su nombre."""
-    return bool(re.match(r"^t\d+", Path(directory).name.lower()))
