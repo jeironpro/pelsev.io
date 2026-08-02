@@ -26,7 +26,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: no ejecutar con DEBUG activado en producción.
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 # Application definition
 INSTALLED_APPS = [
@@ -143,7 +143,9 @@ SPECTACULAR_SETTINGS = {
 }
 
 # CORS: permitir el dev server de Vite en desarrollo.
-CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS", default=["http://localhost:5173"])
+CORS_ALLOWED_ORIGINS = env.str(
+    "CORS_ALLOWED_ORIGINS", default="http://localhost:5173"
+).split(",")
 
 # Identificador por defecto de clave primaria.
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
