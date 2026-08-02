@@ -67,3 +67,11 @@ jobs:
 
       - name: Tests (vitest)
         run: yarn test:run
+
+  docker:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker images
+        run: docker compose build
