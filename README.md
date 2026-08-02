@@ -25,6 +25,7 @@ El contenido se carga automáticamente desde una carpeta `media/` mediante un co
 | Media | ffmpeg / ffprobe (duración y miniaturas) |
 | Tests | pytest, pytest-django (backend) y Vitest + Testing Library (web) |
 | Estilo | flake8, black, isort (backend) |
+| Dependencias backend | pip-tools: `pyproject.toml` → `requirements*.txt` |
 
 ## Estructura del repositorio
 
@@ -61,8 +62,17 @@ Requisitos: Python 3.12+, `ffmpeg` y `ffprobe` en el PATH.
 cd backend
 python -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"    # incluye dependencias de desarrollo (tests y lint)
+pip install -r requirements.txt
+pip install -r test-requirements.txt    # opcional: dependencias de desarrollo (tests y lint)
 cp .env.example .env
+```
+
+Las dependencias se declaran en `pyproject.toml` y los archivos `requirements.txt` y `test-requirements.txt` se generan a partir de él con pip-tools:
+
+```bash
+pip install pip-tools
+pip-compile --output-file requirements.txt pyproject.toml
+pip-compile --extra dev --output-file test-requirements.txt pyproject.toml
 ```
 
 ### Contenido media
