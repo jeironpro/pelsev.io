@@ -40,6 +40,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - Lockfiles `requirements.txt` y `test-requirements.txt` generados desde `pyproject.toml` con pip-tools.
 - Yarn como gestor de paquetes del frontend con la versión fijada en `package.json` (Corepack) y lockfile `yarn.lock`.
 - Hooks de pre-commit con lint y formato para backend (black, isort, flake8) y frontend (eslint, prettier) más validaciones básicas.
+- Contenerización Docker: Dockerfile multistage para backend (Python + ffmpeg + gunicorn) y frontend (Yarn build → Nginx), docker-compose.yml con volúmenes persistentes para DB y media.
 
 ### Cambiado
 
