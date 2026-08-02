@@ -75,6 +75,60 @@ button {
   color: var(--color-text-secondary);
 }
 
+/* Banner de consentimiento de cookies */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
+  z-index: 900;
+}
+
+.cookie-banner__icon {
+  font-size: 2rem;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.cookie-banner__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cookie-banner__text {
+  margin: 0;
+  font-size: var(--size-body);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.cookie-banner__more {
+  font-size: var(--size-small);
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.cookie-banner__action {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .cookie-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+}
+
 /* Contenedor de página */
 .page {
   padding: var(--space-xl) var(--space-lg);
