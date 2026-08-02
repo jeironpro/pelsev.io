@@ -23,9 +23,14 @@
   width: var(--ancho-sidebar-expandido);
 }
 
+.sidebar:hover .sidebar__perfil {
+  justify-content: flex-start;
+}
+
 .sidebar__perfil {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--espacio-sm);
   padding: var(--espacio-sm);
   border-radius: var(--radio-md);
@@ -64,12 +69,12 @@
 }
 
 .sidebar__texto {
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  display: none;
+  white-space: nowrap;
 }
 
 .sidebar:hover .sidebar__texto {
-  opacity: 1;
+  display: inline;
 }
 
 @media (max-width: 768px) {
