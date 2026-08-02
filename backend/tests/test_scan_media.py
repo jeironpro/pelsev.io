@@ -62,6 +62,13 @@ def test_escaneo_elimina_sagas_sin_peliculas(media_root, populated):
 
 
 @pytest.mark.django_db
+def test_escaneo_asigna_categoria_de_la_carpeta(populated):
+    """La categoría se toma de la carpeta que agrupa a la serie."""
+    series = Series.objects.get(slug="breaking-bad")
+    assert series.categories.filter(slug="drama").exists()
+
+
+@pytest.mark.django_db
 def test_escaneo_sin_miniaturas_de_serie(populated):
     """Sin --generate-thumbnails las series y episodios quedan sin imagen."""
     series = Series.objects.get(slug="breaking-bad")
@@ -74,15 +81,18 @@ def test_escaneo_genera_miniaturas_de_series(populated_thumbnails):
     """Con --generate-thumbnails la serie y cada episodio reciben su miniatura."""
     media_root, generated = populated_thumbnails
     series = Series.objects.get(slug="breaking-bad")
-    assert series.thumbnail == "series/breaking-bad/thumbnail.jpg"
-    assert str(media_root / "series/breaking-bad/thumbnail.jpg") in generated
+    assert series.thumbnail == "series/drama/breaking-bad/thumbnail.jpg"
+    assert str(media_root / "series/drama/breaking-bad/thumbnail.jpg") in generated
 
     # Cada episodio tiene su propia miniatura (no compartida).
     episodio = Episode.objects.get(season__series=series, season__number=1, number=1)
-    assert episodio.thumbnail == "series/breaking-bad/season-1/episode-1.jpg"
-    assert str(media_root / "series/breaking-bad/season-1/episode-1.jpg") in generated
+    assert episodio.thumbnail == "series/drama/breaking-bad/season-1/episode-1.jpg"
+    assert (
+        str(media_root / "series/drama/breaking-bad/season-1/episode-1.jpg")
+        in generated
+    )
 
     # Las miniaturas de episodios distintos son diferentes.
     ep2 = Episode.objects.get(season__series=series, season__number=1, number=2)
     assert ep2.thumbnail != episodio.thumbnail
-    assert ep2.thumbnail == "series/breaking-bad/season-1/episode-2.jpg"
+    assert ep2.thumbnail == "series/drama/breaking-bad/season-1/episode-2.jpg"

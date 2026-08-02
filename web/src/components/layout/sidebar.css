@@ -25,13 +25,14 @@
 
 .sidebar:hover .sidebar__perfil {
   justify-content: flex-start;
+  padding: var(--espacio-sm) var(--espacio-md);
 }
 
 .sidebar__perfil {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--espacio-sm);
+  gap: var(--espacio-md);
   padding: var(--espacio-sm);
   border-radius: var(--radio-md);
 }

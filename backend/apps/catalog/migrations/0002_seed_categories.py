@@ -4,6 +4,7 @@ from django.db import migrations
 
 CATEGORIAS = [
     ("accion", "Acción"),
+    ("anime", "Anime"),
     ("aventura", "Aventura"),
     ("ciencia-ficcion", "Ciencia ficción"),
     ("comedia", "Comedia"),

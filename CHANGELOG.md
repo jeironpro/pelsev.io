@@ -39,6 +39,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
 ### Cambiado
 
+- El escaneo agrupa las series en carpetas de categoría (`media/series/<categoria>/...`) y asigna la categoría desde la carpeta.
 - Cabecera flotante rediseñada sin el icono de perfil.
 - Panel lateral flotante siempre visible, colapsado con iconos y expandible al pasar el ratón, con el perfil arriba y los ajustes abajo.
 - La página de inicio muestra una sección por cada categoría aunque esté vacía.

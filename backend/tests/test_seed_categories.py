@@ -10,6 +10,7 @@ def test_categorias_por_defecto_existen():
     """La migración crea categorías aunque no tengan contenido."""
     slugs = {c.slug for c in Category.objects.all()}
     assert "accion" in slugs
+    assert "anime" in slugs
     assert "ciencia-ficcion" in slugs
     assert "terror" in slugs
 
