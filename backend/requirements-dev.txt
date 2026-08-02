@@ -1,6 +1,0 @@
-# Dependencias de desarrollo: tests y estilo de código.
-pytest>=9.1
-pytest-django>=4.12
-flake8>=7.3
-black>=26.5
-isort>=8.0

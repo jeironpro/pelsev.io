@@ -36,6 +36,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - Tests con pytest para el escaneo, el catálogo, la reproducción y el streaming.
 - Configuración de estilo de código: flake8, black e isort.
 - README con la puesta en marcha y la convención de la carpeta `media/`.
+- Configuración del backend unificada en `pyproject.toml` (dependencias, pytest, flake8, black e isort).
+- Lockfiles `requirements.txt` y `test-requirements.txt` generados desde `pyproject.toml` con pip-tools.
 
 ### Cambiado
 
@@ -44,6 +46,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - Panel lateral flotante siempre visible, colapsado con iconos y expandible al pasar el ratón, con el perfil arriba y los ajustes abajo.
 - La página de inicio muestra una sección por cada categoría aunque esté vacía.
 - Reescribir el README genérico inicial con la documentación real del proyecto.
+- Dependencias del backend gestionadas desde `pyproject.toml`: los lockfiles `requirements.txt` y `test-requirements.txt` ahora se generan con pip-tools en lugar de mantenerse a mano.
 
 ### Corregido
 
@@ -56,3 +59,4 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 ### Eliminado
 
 - Contenido README genérico de portafolio.
+- Archivos de configuración del backend en favor de `pyproject.toml`: `requirements.txt`/`requirements-dev.txt` manuales, `setup.cfg` y `pytest.ini`.

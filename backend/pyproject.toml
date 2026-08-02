@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pelsevio-backend"
+version = "0.1.0"
+description = "Backend de pelsev.io: catálogo, reproducción y streaming."
+requires-python = ">=3.12"
+dependencies = [
+    "Django>=6.0",
+    "djangorestframework>=3.17",
+    "django-cors-headers>=4.9",
+    "django-filter>=26.1",
+    "django-environ>=0.14",
+    "drf-spectacular>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1",
+    "pytest-django>=4.12",
+    "flake8>=7.3",
+    "flake8-pyproject>=1.2",
+    "black>=26.5",
+    "isort>=8.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["apps*", "config*", "pelsevio*"]
+exclude = ["tests*", "scripts*", "docs*", "media*"]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+skip = [".venv", "venv", "media", "migrations"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+exclude = [".venv", "venv", "media", "migrations"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "pelsevio.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = "-ra"
