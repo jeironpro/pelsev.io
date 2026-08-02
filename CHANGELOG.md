@@ -38,6 +38,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - README con la puesta en marcha y la convención de la carpeta `media/`.
 - Configuración del backend unificada en `pyproject.toml` (dependencias, pytest, flake8, black e isort).
 - Lockfiles `requirements.txt` y `test-requirements.txt` generados desde `pyproject.toml` con pip-tools.
+- Yarn como gestor de paquetes del frontend con la versión fijada en `package.json` (Corepack) y lockfile `yarn.lock`.
 
 ### Cambiado
 
@@ -47,6 +48,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 - La página de inicio muestra una sección por cada categoría aunque esté vacía.
 - Reescribir el README genérico inicial con la documentación real del proyecto.
 - Dependencias del backend gestionadas desde `pyproject.toml`: los lockfiles `requirements.txt` y `test-requirements.txt` ahora se generan con pip-tools en lugar de mantenerse a mano.
+- Frontend: se sustituye npm por Yarn (Corepack) para la instalación y ejecución de scripts.
 
 ### Corregido
 

@@ -68,9 +68,7 @@ export default function DetallePelicula() {
           <span className="material-icons" aria-hidden="true">
             play_circle
           </span>
-          <span className="detail__duration">
-            {formatDuration(movie.duration_sec)}
-          </span>
+          <span className="detail__duration">{formatDuration(movie.duration_sec)}</span>
         </button>
 
         {movie.description && (
