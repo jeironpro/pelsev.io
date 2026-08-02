@@ -4,3 +4,4 @@ dist
 .env.local
 .vite
 coverage
+.yarn/install-state.gz

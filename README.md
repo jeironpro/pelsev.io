@@ -22,6 +22,7 @@ El contenido se carga automáticamente desde una carpeta `media/` mediante un co
 | API | drf-spectacular (Swagger/OpenAPI), django-filter |
 | Frontend | React 18, Vite, React Router |
 | Estilo web | CSS variables, Material Icons, Prettier, ESLint |
+| Dependencias frontend | Yarn (Corepack, versión fijada en `package.json`) |
 | Media | ffmpeg / ffprobe (duración y miniaturas) |
 | Tests | pytest, pytest-django (backend) y Vitest + Testing Library (web) |
 | Estilo | flake8, black, isort (backend) |
@@ -136,21 +137,22 @@ black . && isort . && flake8
 
 ## Puesta en marcha (frontend web)
 
-Requisitos: Node.js 20+ y npm. El backend debe estar en marcha en el puerto 8000 (el servidor de desarrollo hace proxy de `/api`).
+Requisitos: Node.js 20+ (con Corepack activo) y Yarn. El backend debe estar en marcha en el puerto 8000 (el servidor de desarrollo hace proxy de `/api`).
 
 ```bash
 cd web
-npm install
-npm run dev          # http://localhost:5173
+corepack enable          # activa la versión de Yarn fijada en package.json
+yarn install
+yarn dev                 # http://localhost:5173
 ```
 
 ### Tests, lint y formato (web)
 
 ```bash
-npm run test:run     # Vitest (una ejecución)
-npm run lint         # ESLint
-npm run format       # Prettier (reescribe)
-npm run build        # build de producción
+yarn test:run     # Vitest (una ejecución)
+yarn lint         # ESLint
+yarn format       # Prettier (reescribe)
+yarn build        # build de producción
 ```
 
 ## Endpoints principales

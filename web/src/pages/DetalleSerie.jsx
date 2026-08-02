@@ -58,12 +58,16 @@ export default function DetalleSerie() {
     )
   }
 
-  const season =
-    series.seasons.find((s) => s.id === activeSeason) || series.seasons[0]
+  const season = series.seasons.find((s) => s.id === activeSeason) || series.seasons[0]
 
   return (
     <div className="detail">
-      <img className="detail__background" src={series.thumbnail} alt="" aria-hidden="true" />
+      <img
+        className="detail__background"
+        src={series.thumbnail}
+        alt=""
+        aria-hidden="true"
+      />
       <div className="detail__body">
         <h1 className="detail__title">{series.title}</h1>
         {series.description && (

@@ -120,9 +120,7 @@ export default function Reproductor() {
         initialPosition={resumePosition}
         onBack={() => navigate(-1)}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={() =>
-          save(lastPositionRef.current, lastDurationRef.current, true)
-        }
+        onEnded={() => save(lastPositionRef.current, lastDurationRef.current, true)}
         onError={() => setError(new Error('No se pudo cargar el vídeo.'))}
       />
     </div>

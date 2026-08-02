@@ -10,9 +10,7 @@ export default function SeasonCard({ season, active, onSelect }) {
       aria-pressed={active}
     >
       <span className="season__number">T{season.number}</span>
-      <span className="season__episodes">
-        {season.episodes?.length || 0} episodios
-      </span>
+      <span className="season__episodes">{season.episodes?.length || 0} episodios</span>
     </button>
   )
 }

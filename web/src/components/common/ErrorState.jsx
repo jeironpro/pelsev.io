@@ -7,11 +7,7 @@ export default function ErrorState({ message, onRetry }) {
       </span>
       <p>{message || 'Ha ocurrido un error inesperado.'}</p>
       {onRetry && (
-        <button
-          type="button"
-          className="button button--secondary"
-          onClick={onRetry}
-        >
+        <button type="button" className="button button--secondary" onClick={onRetry}>
           Reintentar
         </button>
       )}

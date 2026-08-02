@@ -41,10 +41,7 @@ export default function VideoPlayer({
     clearTimeout(hideTimer.current)
     const video = videoRef.current
     if (video && !video.paused) {
-      hideTimer.current = setTimeout(
-        () => setShowControls(false),
-        HIDE_CONTROLS_MS
-      )
+      hideTimer.current = setTimeout(() => setShowControls(false), HIDE_CONTROLS_MS)
     }
   }, [])
 
@@ -185,9 +182,7 @@ export default function VideoPlayer({
 
   return (
     <div
-      className={`video-player ${
-        showControls ? 'video-player--controls' : ''
-      }`}
+      className={`video-player ${showControls ? 'video-player--controls' : ''}`}
       ref={containerRef}
       onMouseMove={show}
       onKeyDown={handleKeyDown}
