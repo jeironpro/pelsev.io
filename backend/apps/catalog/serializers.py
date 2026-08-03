@@ -120,14 +120,25 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 class SeriesListSerializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
+    episodes_count = serializers.SerializerMethodField()
     categories = CategorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Series
-        fields = ["id", "title", "description", "thumbnail", "categories"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "thumbnail",
+            "episodes_count",
+            "categories",
+        ]
 
     def get_thumbnail(self, obj):
         return media_url(self.context.get("request"), "series", obj.id, "thumbnail")
+
+    def get_episodes_count(self, obj):
+        return Episode.objects.filter(season__series=obj).count()
 
 
 class SeriesDetailSerializer(SeriesListSerializer):

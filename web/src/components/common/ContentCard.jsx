@@ -29,7 +29,11 @@ export default function ContentCard({ item, type }) {
       />
       <div className="card__content">
         <h3 className="card__title">{item.title}</h3>
-        <span className="card__duration">{formatDuration(item.duration_sec)}</span>
+        <span className="card__duration">
+          {type === 'serie'
+            ? `${item.episodes_count} episodios`
+            : formatDuration(item.duration_sec)}
+        </span>
       </div>
       {item.progress?.position_sec > 0 && (
         <div className="card__progress">

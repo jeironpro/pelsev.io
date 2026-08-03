@@ -28,10 +28,12 @@ def test_detalle_pelicula(client, populated):
 
 @pytest.mark.django_db
 def test_listado_series(client, populated):
-    """El listado de series funciona."""
+    """El listado de series funciona e incluye el número de episodios."""
     response = client.get("/api/catalog/series/")
     assert response.status_code == 200
-    assert len(response.json()) == 1
+    data = response.json()
+    assert len(data) == 1
+    assert data[0]["episodes_count"] == 3
 
 
 @pytest.mark.django_db

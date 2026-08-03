@@ -33,6 +33,7 @@ const homeData = {
         {
           id: 5,
           title: 'Breaking Bad',
+          episodes_count: 62,
           thumbnail: '/breaking.jpg',
         },
       ],
@@ -76,6 +77,7 @@ describe('Home', () => {
     expect(screen.getByText('Una Nueva Esperanza')).toBeInTheDocument()
     expect(screen.getByText('El Padrino')).toBeInTheDocument()
     expect(screen.getByText('Breaking Bad')).toBeInTheDocument()
+    expect(screen.getByText('62 episodios')).toBeInTheDocument()
   })
 
   it('muestra una sección por categoría aunque esté vacía', async () => {
