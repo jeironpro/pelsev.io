@@ -1,42 +1,27 @@
 import './detalle.css'
 
-import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import ErrorState from '../components/common/ErrorState'
 import Spinner from '../components/ui/Spinner'
-import { catalogService } from '../services/catalogService'
+import { useMovie } from '../hooks/useCatalog'
 import { formatDuration } from '../utils/format'
 
 // Detalle de película: fondo con opacidad, play centrado, título y duración.
 export default function DetallePelicula() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [movie, setMovie] = useState(null)
-  const [error, setError] = useState(null)
-
-  const load = useCallback(async () => {
-    setError(null)
-    try {
-      setMovie(await catalogService.movie(id))
-    } catch (err) {
-      setError(err)
-    }
-  }, [id])
-
-  useEffect(() => {
-    load()
-  }, [load])
+  const { data: movie, loading, error, reload } = useMovie(id)
 
   if (error) {
     return (
       <div className="page">
-        <ErrorState message={error.message} onRetry={load} />
+        <ErrorState message={error.message} onRetry={reload} />
       </div>
     )
   }
 
-  if (!movie) {
+  if (loading || !movie) {
     return (
       <div className="loading">
         <Spinner />

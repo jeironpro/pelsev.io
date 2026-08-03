@@ -1,38 +1,22 @@
-import { useCallback, useEffect, useState } from 'react'
-
 import ContentCard from '../components/common/ContentCard'
 import EmptyState from '../components/common/EmptyState'
 import ErrorState from '../components/common/ErrorState'
 import Spinner from '../components/ui/Spinner'
-import { catalogService } from '../services/catalogService'
+import { useSeries } from '../hooks/useCatalog'
 
 // Página de series.
 export default function Series() {
-  const [shows, setShows] = useState(null)
-  const [error, setError] = useState(null)
-
-  const load = useCallback(async () => {
-    setError(null)
-    try {
-      setShows(await catalogService.series())
-    } catch (err) {
-      setError(err)
-    }
-  }, [])
-
-  useEffect(() => {
-    load()
-  }, [load])
+  const { data: series, loading, error, reload } = useSeries()
 
   if (error) {
     return (
       <div className="page">
-        <ErrorState message={error.message} onRetry={load} />
+        <ErrorState message={error.message} onRetry={reload} />
       </div>
     )
   }
 
-  if (!shows) {
+  if (loading || !series) {
     return (
       <div className="loading">
         <Spinner />
@@ -43,12 +27,12 @@ export default function Series() {
   return (
     <div className="page">
       <h1 className="page__title">Series</h1>
-      {shows.length === 0 ? (
+      {series.length === 0 ? (
         <EmptyState message="No hay series disponibles." />
       ) : (
         <div className="catalog-grid">
-          {shows.map((show) => (
-            <ContentCard key={show.id} item={show} type="serie" />
+          {series.map((serie) => (
+            <ContentCard key={serie.id} item={serie} type="serie" />
           ))}
         </div>
       )}

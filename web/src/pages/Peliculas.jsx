@@ -1,38 +1,22 @@
-import { useCallback, useEffect, useState } from 'react'
-
 import ContentCard from '../components/common/ContentCard'
 import EmptyState from '../components/common/EmptyState'
 import ErrorState from '../components/common/ErrorState'
 import Spinner from '../components/ui/Spinner'
-import { catalogService } from '../services/catalogService'
+import { useMovies } from '../hooks/useCatalog'
 
 // Página de películas.
 export default function Peliculas() {
-  const [movies, setMovies] = useState(null)
-  const [error, setError] = useState(null)
-
-  const load = useCallback(async () => {
-    setError(null)
-    try {
-      setMovies(await catalogService.movies())
-    } catch (err) {
-      setError(err)
-    }
-  }, [])
-
-  useEffect(() => {
-    load()
-  }, [load])
+  const { data: movies, loading, error, reload } = useMovies()
 
   if (error) {
     return (
       <div className="page">
-        <ErrorState message={error.message} onRetry={load} />
+        <ErrorState message={error.message} onRetry={reload} />
       </div>
     )
   }
 
-  if (!movies) {
+  if (loading || !movies) {
     return (
       <div className="loading">
         <Spinner />
