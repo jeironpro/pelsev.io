@@ -9,46 +9,35 @@ import EmptyState from '../components/common/EmptyState'
 import ErrorState from '../components/common/ErrorState'
 import HorizontalRow from '../components/common/HorizontalRow'
 import Spinner from '../components/ui/Spinner'
-import { catalogService } from '../services/catalogService'
+import { useHome } from '../hooks/useCatalog'
 import { progressService } from '../services/progressService'
 
 // Página de inicio: categorías, "Continuar viendo" y secciones por categoría.
 export default function Home() {
-  const [catalog, setCatalog] = useState(null)
+  const { data: catalog, loading, error, reload } = useHome()
   const [continueWatching, setContinueWatching] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
-  const load = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  const loadContinueWatching = useCallback(async () => {
     try {
-      const [homeData, continueWatchingData] = await Promise.all([
-        catalogService.home(),
-        progressService.continueWatching(),
-      ])
-      setCatalog(homeData)
-      setContinueWatching(continueWatchingData)
-    } catch (err) {
-      setError(err)
-    } finally {
-      setLoading(false)
+      setContinueWatching(await progressService.continueWatching())
+    } catch {
+      // Si falla, se muestra el resto del contenido sin la fila.
     }
   }, [])
 
   useEffect(() => {
-    load()
-  }, [load])
+    loadContinueWatching()
+  }, [loadContinueWatching])
 
   // Elimina un elemento de "Continuar viendo".
-  const remove = async (id) => {
+  const remove = useCallback(async (id) => {
     try {
       await progressService.remove(id)
       setContinueWatching((current) => current.filter((item) => item.id !== id))
     } catch {
       // Se mantiene la lista original si falla la petición.
     }
-  }
+  }, [])
 
   if (loading && !catalog) {
     return (
@@ -61,7 +50,7 @@ export default function Home() {
   if (error && !catalog) {
     return (
       <div className="page">
-        <ErrorState message={error.message} onRetry={load} />
+        <ErrorState message={error.message} onRetry={reload} />
       </div>
     )
   }

@@ -1,14 +1,13 @@
 import './detalle.css'
 import './serie.css'
 
-import { useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
 import EpisodeCard from '../components/common/EpisodeCard'
 import ErrorState from '../components/common/ErrorState'
 import SeasonCard from '../components/common/SeasonCard'
 import Spinner from '../components/ui/Spinner'
-import { catalogService } from '../services/catalogService'
+import { useSerieDetail } from '../hooks/useCatalog'
 
 // Detalle de serie: fondo con opacidad, temporadas y episodios con estado.
 export default function DetalleSerie() {
@@ -16,41 +15,27 @@ export default function DetalleSerie() {
   const [searchParams, setSearchParams] = useSearchParams()
   const seasonParam = searchParams.get('temporada')
 
-  const [series, setSeries] = useState(null)
-  const [activeSeason, setActiveSeason] = useState(null)
-  const [error, setError] = useState(null)
-
-  const load = useCallback(async () => {
-    setError(null)
-    try {
-      const data = await catalogService.seriesDetail(id)
-      setSeries(data)
-      const highlighted = data.seasons.find((s) => String(s.number) === seasonParam)
-      setActiveSeason(highlighted?.id ?? data.seasons?.[0]?.id ?? null)
-    } catch (err) {
-      setError(err)
-    }
-  }, [id, seasonParam])
-
-  useEffect(() => {
-    load()
-  }, [load])
+  const { data: series, loading, error, reload } = useSerieDetail(id)
+  const activeSeason = series
+    ? series.seasons.find((s) => String(s.number) === seasonParam)?.id ??
+      series.seasons?.[0]?.id ??
+      null
+    : null
 
   // Selecciona una temporada y la refleja en la URL para recuperarla al volver.
   const selectSeason = (season) => {
-    setActiveSeason(season.id)
     setSearchParams({ temporada: String(season.number) }, { replace: true })
   }
 
   if (error) {
     return (
       <div className="page">
-        <ErrorState message={error.message} onRetry={load} />
+        <ErrorState message={error.message} onRetry={reload} />
       </div>
     )
   }
 
-  if (!series) {
+  if (loading || !series) {
     return (
       <div className="loading">
         <Spinner />
