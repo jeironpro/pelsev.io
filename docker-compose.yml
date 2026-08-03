@@ -8,6 +8,7 @@ services:
       - MEDIA_ROOT=/app/data/media
     volumes:
       - backend_data:/app/data
+      - ./backend/media:/app/data/media
     expose:
       - "8000"
 
