@@ -168,6 +168,36 @@ docker build -t pelsevio-backend backend
 docker build -t pelsevio-web web
 ```
 
+## Acceso en red local
+
+Para acceder a pelsev.io desde otro dispositivo en la misma red local:
+
+1. Obtén la IP del equipo donde corre Docker. En Linux:
+   ```bash
+   hostname -I | awk '{print $1}'
+   ```
+   O revisa la interfaz `docker0`:
+   ```bash
+   ip -4 addr show docker0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+   ```
+
+2. Añade la IP del host a `ALLOWED_HOSTS` y `CORS_ALLOWED_ORIGINS` en `backend/.env`:
+   ```
+   ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.100
+   CORS_ALLOWED_ORIGINS=http://localhost:5173,http://192.168.1.100:8081
+   ```
+   Sustituye `192.168.1.100` por tu IP real.
+
+3. Reinicia los contenedores:
+   ```bash
+   docker compose up -d --build
+   ```
+
+4. Accede desde cualquier dispositivo de la red en `http://<IP-del-host>:8081`.
+
+> Para permitir cualquier host en desarrollo (no recomendado en producción),
+> usa `ALLOWED_HOSTS=*` en `backend/.env`.
+
 ## Puesta en marcha (frontend web)
 
 Requisitos: Node.js 20+ (con Corepack activo) y Yarn. El backend debe estar en marcha en el puerto 8000 (el servidor de desarrollo hace proxy de `/api`).
