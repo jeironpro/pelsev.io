@@ -2,26 +2,25 @@ import './header.css'
 
 import { NavLink } from 'react-router-dom'
 
-// Cabecera flotante con logo y navegación principal.
-export default function Header() {
+// Cabecera flotante alineada con el panel lateral: logo y apertura del menú en móvil.
+export default function Header({ open, onToggleMenu }) {
   return (
     <header className="header">
-      <div className="header__left">
-        <NavLink to="/" className="header__logo" aria-label="Ir al inicio">
-          pelsev.io
-        </NavLink>
-      </div>
+      <NavLink to="/" className="header__logo" aria-label="Ir al inicio">
+        pelsev.io
+      </NavLink>
 
-      <nav className="header__nav" aria-label="Navegación principal">
-        <NavLink to="/peliculas" className="header__link">
-          Películas
-        </NavLink>
-        <NavLink to="/series" className="header__link">
-          Series
-        </NavLink>
-      </nav>
-
-      <div className="header__right" />
+      <button
+        type="button"
+        className="header__menu"
+        aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+        aria-expanded={open}
+        onClick={onToggleMenu}
+      >
+        <span className="material-icons" aria-hidden="true">
+          {open ? 'close' : 'menu'}
+        </span>
+      </button>
     </header>
   )
 }

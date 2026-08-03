@@ -81,3 +81,10 @@
     scroll-behavior: auto;
   }
 }
+
+/* En móvil el scroll táctil es suficiente; se ocultan los botones. */
+@media (max-width: 768px) {
+  .row__button {
+    display: none;
+  }
+}

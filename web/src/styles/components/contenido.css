@@ -6,6 +6,6 @@
 
 @media (max-width: 768px) {
   .content {
-    padding-left: calc(60px + 2 * var(--space-sm));
+    padding-left: var(--space-md);
   }
 }
